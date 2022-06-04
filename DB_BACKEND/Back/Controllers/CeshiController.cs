@@ -16,6 +16,7 @@ namespace Back.Controllers
         public CeshiController(ModelContext modelContext)
         {
             _Context = modelContext;
+            //_Context.ChangeTracker.QueryTrackingBehavior = Microsoft.EntityFrameworkCore.QueryTrackingBehavior.NoTracking;
         }
         [HttpGet]
         public List<User> GetValue()
@@ -23,6 +24,9 @@ namespace Back.Controllers
             List<User> us = new List<User>();
             //us=_Context.Users.ToList();
             us = _Context.Users.Where(x => x.UserId == 1).ToList();
+            //us[0].UserName = "ori";
+            _Context.Users.Update(us[0]);
+            _Context.SaveChanges();
                 return us;
         }
     }

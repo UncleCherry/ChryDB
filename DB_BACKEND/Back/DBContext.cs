@@ -11,7 +11,7 @@ namespace Back
         public DBContext(DbContextOptions<DBContext> options)
            : base(options)
         {
-
+            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;//关闭追踪
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
