@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DB_BACKEND\DB_BACKEND\DB_BACKEND.csproj" />
+    
   </ItemGroup>
 
 </Project>

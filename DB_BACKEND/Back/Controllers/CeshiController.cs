@@ -12,14 +12,17 @@ namespace Back.Controllers
 
     public class CeshiController : ControllerBase
     {
+        private readonly ModelContext _Context;
+        public CeshiController(ModelContext modelContext)
+        {
+            _Context = modelContext;
+        }
         [HttpGet]
         public List<User> GetValue()
         {
-            List<User> us = new List<User>(); 
-            using (ModelContext context = new ModelContext())
-            {
-                us=context.Users.ToList();
-            }
+            List<User> us = new List<User>();
+            //us=_Context.Users.ToList();
+            us = _Context.Users.Where(x => x.UserId == 1).ToList();
                 return us;
         }
     }

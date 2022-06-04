@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\DB_BACKEND\\Back\\Back.csproj": {}
+    "D:\\gitPro\\ChryDB\\DB_BACKEND\\Back\\Back.csproj": {}
   },
   "projects": {
-    "D:\\DB_BACKEND\\Back\\Back.csproj": {
+    "D:\\gitPro\\ChryDB\\DB_BACKEND\\Back\\Back.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\DB_BACKEND\\Back\\Back.csproj",
+        "projectUniqueName": "D:\\gitPro\\ChryDB\\DB_BACKEND\\Back\\Back.csproj",
         "projectName": "Back",
-        "projectPath": "D:\\DB_BACKEND\\Back\\Back.csproj",
+        "projectPath": "D:\\gitPro\\ChryDB\\DB_BACKEND\\Back\\Back.csproj",
         "packagesPath": "C:\\Users\\15297\\.nuget\\packages\\",
-        "outputPath": "D:\\DB_BACKEND\\Back\\obj\\",
+        "outputPath": "D:\\gitPro\\ChryDB\\DB_BACKEND\\Back\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\15297\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -27,11 +27,7 @@
         "frameworks": {
           "net5.0": {
             "targetAlias": "net5.0",
-            "projectReferences": {
-              "D:\\DB_BACKEND\\DB_BACKEND\\DB_BACKEND\\DB_BACKEND.csproj": {
-                "projectPath": "D:\\DB_BACKEND\\DB_BACKEND\\DB_BACKEND\\DB_BACKEND.csproj"
-              }
-            }
+            "projectReferences": {}
           }
         },
         "warningProperties": {
@@ -73,69 +69,6 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[5.6.3, )"
-            }
-          },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.AspNetCore.App": {
-              "privateAssets": "none"
-            },
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.408\\RuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "D:\\DB_BACKEND\\DB_BACKEND\\DB_BACKEND\\DB_BACKEND.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "D:\\DB_BACKEND\\DB_BACKEND\\DB_BACKEND\\DB_BACKEND.csproj",
-        "projectName": "DB_BACKEND",
-        "projectPath": "D:\\DB_BACKEND\\DB_BACKEND\\DB_BACKEND\\DB_BACKEND.csproj",
-        "packagesPath": "C:\\Users\\15297\\.nuget\\packages\\",
-        "outputPath": "D:\\DB_BACKEND\\DB_BACKEND\\DB_BACKEND\\obj\\",
-        "projectStyle": "PackageReference",
-        "configFilePaths": [
-          "C:\\Users\\15297\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "netcoreapp3.1"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "netcoreapp3.1": {
-            "targetAlias": "netcoreapp3.1",
-            "projectReferences": {}
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        }
-      },
-      "frameworks": {
-        "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
-          "dependencies": {
-            "Microsoft.EntityFrameworkCore": {
-              "target": "Package",
-              "version": "[3.1.25, )"
             }
           },
           "imports": [

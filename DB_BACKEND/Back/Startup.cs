@@ -31,7 +31,8 @@ namespace Back
             //services.AddDbContext<DBContext>(options =>
             //options.UseOracle(Configuration.GetConnectionString("OracleDBContext"), b => b.UseOracleSQLCompatibility("12")));
             //
-           // services.AddScoped<ModelContext>();
+            // services.AddScoped<ModelContext>();
+            services.AddSingleton(typeof(ModelContext));//ÒÀÀµ×¢Èëµ¥Àý
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

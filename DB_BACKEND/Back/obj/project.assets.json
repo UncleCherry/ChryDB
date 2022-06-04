@@ -2214,22 +2214,6 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XmlSerializer.dll": {}
         }
-      },
-      "DB_BACKEND/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v3.1",
-        "dependencies": {
-          "Microsoft.EntityFrameworkCore": "3.1.25"
-        },
-        "compile": {
-          "bin/placeholder/DB_BACKEND.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/DB_BACKEND.dll": {}
-        },
-        "frameworkReferences": [
-          "Microsoft.AspNetCore.App"
-        ]
       }
     }
   },
@@ -7601,16 +7585,10 @@
         "system.xml.xmlserializer.4.3.0.nupkg.sha512",
         "system.xml.xmlserializer.nuspec"
       ]
-    },
-    "DB_BACKEND/1.0.0": {
-      "type": "project",
-      "path": "../DB_BACKEND/DB_BACKEND/DB_BACKEND.csproj",
-      "msbuildProject": "../DB_BACKEND/DB_BACKEND/DB_BACKEND.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net5.0": [
-      "DB_BACKEND >= 1.0.0",
       "Microsoft.EntityFrameworkCore >= 5.0.17",
       "Microsoft.EntityFrameworkCore.SqlServer >= 5.0.17",
       "Microsoft.EntityFrameworkCore.Tools >= 5.0.17",
@@ -7626,11 +7604,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\DB_BACKEND\\Back\\Back.csproj",
+      "projectUniqueName": "D:\\gitPro\\ChryDB\\DB_BACKEND\\Back\\Back.csproj",
       "projectName": "Back",
-      "projectPath": "D:\\DB_BACKEND\\Back\\Back.csproj",
+      "projectPath": "D:\\gitPro\\ChryDB\\DB_BACKEND\\Back\\Back.csproj",
       "packagesPath": "C:\\Users\\15297\\.nuget\\packages\\",
-      "outputPath": "D:\\DB_BACKEND\\Back\\obj\\",
+      "outputPath": "D:\\gitPro\\ChryDB\\DB_BACKEND\\Back\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\15297\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -7646,11 +7624,7 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
-          "projectReferences": {
-            "D:\\DB_BACKEND\\DB_BACKEND\\DB_BACKEND\\DB_BACKEND.csproj": {
-              "projectPath": "D:\\DB_BACKEND\\DB_BACKEND\\DB_BACKEND\\DB_BACKEND.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {
