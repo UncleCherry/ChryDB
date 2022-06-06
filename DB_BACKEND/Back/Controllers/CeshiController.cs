@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Back.Entity;
 namespace Back.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
 
     public class CeshiController : ControllerBase
@@ -19,15 +19,16 @@ namespace Back.Controllers
             //_Context.ChangeTracker.QueryTrackingBehavior = Microsoft.EntityFrameworkCore.QueryTrackingBehavior.NoTracking;
         }
         [HttpGet]
+        //[HttpPost]
         public List<User> GetValue()
         {
             List<User> us = new List<User>();
-            //us=_Context.Users.ToList();
-            us = _Context.Users.Where(x => x.UserId == 1).ToList();
+            us=_Context.Users.ToList();
+           // us = _Context.Users.Where(x => x.UserId == {id}).ToList();
             //us[0].UserName = "ori";
-            _Context.Users.Update(us[0]);
-            _Context.SaveChanges();
-                return us;
+            //_Context.Users.Update(us[0]);
+           // _Context.SaveChanges();
+            return us;
         }
     }
 }
