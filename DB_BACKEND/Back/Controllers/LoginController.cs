@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Back.Entity;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 
@@ -42,12 +43,18 @@ namespace Back.Controllers
         public String Post()
         {
             String a;
-            Request.Cookies.TryGetValue("aaa",out a);
+            CookieOptions cookieOptions = new CookieOptions();
+            //cookieOptions.Path = "/";
+           // cookieOptions.HttpOnly = false;
+            cookieOptions.SameSite = SameSiteMode.None;
+            cookieOptions.MaxAge = new TimeSpan(0, 10, 0);
+            cookieOptions.Secure = true;
+            Request.Cookies.TryGetValue("user_id", out a);
             //if (Request.Headers.TryGetValue("Cookies", out a))
             //    return "aaaa";
             //else
             //    return "bbbb";
-            Response.Cookies.Append("user_id","123");
+            Response.Cookies.Append("user_id","123",cookieOptions);
             return a;
         }
 
