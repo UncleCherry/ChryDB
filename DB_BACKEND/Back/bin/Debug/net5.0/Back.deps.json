@@ -33,7 +33,6 @@
     ".NETCoreApp,Version=v5.0": {
       "Back/1.0.0": {
         "dependencies": {
-          "DB_BACKEND": "1.0.0",
           "Microsoft.EntityFrameworkCore": "5.0.17",
           "Microsoft.EntityFrameworkCore.SqlServer": "5.0.17",
           "Microsoft.EntityFrameworkCore.Tools": "5.0.17",
@@ -3752,12 +3751,6 @@
           "WindowsBase.dll": {}
         },
         "compileOnly": true
-      },
-      "DB_BACKEND/1.0.0": {
-        "dependencies": {
-          "Microsoft.EntityFrameworkCore": "5.0.17"
-        },
-        "compileOnly": true
       }
     }
   },
@@ -6106,11 +6099,6 @@
     },
     "WindowsBase/4.0.0.0": {
       "type": "referenceassembly",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "DB_BACKEND/1.0.0": {
-      "type": "project",
       "serviceable": false,
       "sha512": ""
     }
