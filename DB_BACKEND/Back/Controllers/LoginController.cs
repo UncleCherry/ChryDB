@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Back.Entity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,9 +21,12 @@ namespace Back.Controllers
         }
         // GET: api/<LoginController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public User Get()
         {
-            return new string[] { "value1", "value2" };
+            String userid;
+            Request.Cookies.TryGetValue("user_id", out userid);
+
+            return _Context.Users.Single(x => x.UserId == int.Parse(userid));
         }
 
         // GET api/<LoginController>/5
@@ -34,8 +38,16 @@ namespace Back.Controllers
 
         // POST api/<LoginController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public String Post()
         {
+            String a;
+            Request.Cookies.TryGetValue("aaa",out a);
+            //if (Request.Headers.TryGetValue("Cookies", out a))
+            //    return "aaaa";
+            //else
+            //    return "bbbb";
+            Response.Cookies.Append("user_id","123");
+            return a;
         }
 
         // PUT api/<LoginController>/5
