@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Back.Entity;
+using Microsoft.AspNetCore.Cors;
+
 namespace Back.Controllers
 {
     [Route("api/[controller]")]
