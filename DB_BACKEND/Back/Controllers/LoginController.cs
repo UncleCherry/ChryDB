@@ -40,22 +40,31 @@ namespace Back.Controllers
 
         // POST api/<LoginController>
         [HttpPost]
-        public String Post()
+        public String Post([FromBody] LoginInfo logininfo)
         {
             String a;
-            CookieOptions cookieOptions = new CookieOptions();
-            //cookieOptions.Path = "/";
-           // cookieOptions.HttpOnly = false;
-            cookieOptions.SameSite = SameSiteMode.None;
-            cookieOptions.MaxAge = new TimeSpan(0, 10, 0);
-            cookieOptions.Secure = true;
-            Request.Cookies.TryGetValue("user_id", out a);
-            //if (Request.Headers.TryGetValue("Cookies", out a))
-            //    return "aaaa";
-            //else
-            //    return "bbbb";
-            Response.Cookies.Append("user_id","123",cookieOptions);
-            return a;
+            LoginMessage loginMessage = new LoginMessage();
+            if (logininfo.UserId != null && logininfo.Password != null)
+            {
+                loginMessage.errorCode = 200;
+            }
+            try
+            {
+                var user = _Context.Users.Single(b => b.UserId == logininfo.UserId && b.Password ==logininfo.Password);
+                else
+                {
+                    loginMessage.data.Add("token", 12345);
+                    loginMessage.data.Add("userid", user.UserId);
+                    loginMessage.data.Add("username", user.UserName);
+                    loginMessage.data.Add("usertype", user.UserType);
+                }
+            }
+            catch
+            {
+                loginMessage.errorCode = 11111;
+                
+            }
+            return loginMessage.ReturnJson();
         }
 
         // PUT api/<LoginController>/5
@@ -68,6 +77,11 @@ namespace Back.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+        public class LoginInfo
+        {
+            public decimal UserId { get; set; }
+            public string Password { get; set; }
         }
     }
 }
