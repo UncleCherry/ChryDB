@@ -16,9 +16,9 @@ namespace Back.Entity
 
         public decimal StudentId { get; set; }
         public string Name { get; set; }
-        public byte? Grade { get; set; }
+        public decimal? Grade { get; set; }
         public string Major { get; set; }
-        public byte? Credit { get; set; }
+        public decimal? Credit { get; set; }
 
         public virtual User StudentNavigation { get; set; }
         public virtual TrainingPlan TrainingPlan { get; set; }

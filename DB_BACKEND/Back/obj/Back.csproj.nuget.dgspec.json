@@ -1,21 +1,28 @@
 {
   "format": 1,
   "restore": {
-    "D:\\gitPro\\ChryDB\\DB_BACKEND\\Back\\Back.csproj": {}
+    "C:\\Users\\ASUS\\Desktop\\back\\backCherry\\DB_BACKEND\\Back\\Back.csproj": {}
   },
   "projects": {
-    "D:\\gitPro\\ChryDB\\DB_BACKEND\\Back\\Back.csproj": {
+    "C:\\Users\\ASUS\\Desktop\\back\\backCherry\\DB_BACKEND\\Back\\Back.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\gitPro\\ChryDB\\DB_BACKEND\\Back\\Back.csproj",
+        "projectUniqueName": "C:\\Users\\ASUS\\Desktop\\back\\backCherry\\DB_BACKEND\\Back\\Back.csproj",
         "projectName": "Back",
-        "projectPath": "D:\\gitPro\\ChryDB\\DB_BACKEND\\Back\\Back.csproj",
-        "packagesPath": "C:\\Users\\15297\\.nuget\\packages\\",
-        "outputPath": "D:\\gitPro\\ChryDB\\DB_BACKEND\\Back\\obj\\",
+        "projectPath": "C:\\Users\\ASUS\\Desktop\\back\\backCherry\\DB_BACKEND\\Back\\Back.csproj",
+        "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ASUS\\Desktop\\back\\backCherry\\DB_BACKEND\\Back\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "F:\\C++\\NuGetPackages",
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\15297\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
@@ -40,6 +47,10 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
+            "JsonWebTokens": {
+              "target": "Package",
+              "version": "[4.0.0, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[5.0.17, )"

@@ -11,6 +11,18 @@
           "lib/netstandard2.0/Humanizer.dll": {}
         }
       },
+      "JsonWebTokens/4.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.3"
+        },
+        "compile": {
+          "lib/netstandard2.0/JsonWebTokens.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/JsonWebTokens.dll": {}
+        }
+      },
       "Microsoft.AspNetCore.Html.Abstractions/2.2.0": {
         "type": "package",
         "dependencies": {
@@ -859,7 +871,7 @@
           }
         }
       },
-      "Newtonsoft.Json/11.0.2": {
+      "Newtonsoft.Json/12.0.3": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
@@ -2232,6 +2244,19 @@
         "lib/netstandard2.0/Humanizer.dll",
         "lib/netstandard2.0/Humanizer.xml",
         "logo.png"
+      ]
+    },
+    "JsonWebTokens/4.0.0": {
+      "sha512": "mB4iOGFSTi39PVpd0nZnllBmIBU1PRLGB99e1DxiFIO0TI6iEqGIIa2afXOZML72eWk6U53u1wr0ITChV7BPBg==",
+      "type": "package",
+      "path": "jsonwebtokens/4.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "jsonwebtokens.4.0.0.nupkg.sha512",
+        "jsonwebtokens.nuspec",
+        "lib/netstandard2.0/JsonWebTokens.dll",
+        "lib/netstandard2.0/JsonWebTokens.xml"
       ]
     },
     "Microsoft.AspNetCore.Html.Abstractions/2.2.0": {
@@ -3759,10 +3784,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Newtonsoft.Json/11.0.2": {
-      "sha512": "IvJe1pj7JHEsP8B8J8DwlMEx8UInrs/x+9oVY+oCD13jpLu4JbJU2WCIsMRn5C4yW9+DgkaO8uiVE5VHKjpmdQ==",
+    "Newtonsoft.Json/12.0.3": {
+      "sha512": "6mgjfnRB4jKMlzHSl+VD+oUc1IebOZabkbyWj2RiTgWwYPPuaK1H97G1sHqGwPlS5npiF5Q0OrxN1wni2n5QWg==",
       "type": "package",
-      "path": "newtonsoft.json/11.0.2",
+      "path": "newtonsoft.json/12.0.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -3785,8 +3810,9 @@
         "lib/portable-net40+sl5+win8+wp8+wpa81/Newtonsoft.Json.xml",
         "lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.dll",
         "lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.xml",
-        "newtonsoft.json.11.0.2.nupkg.sha512",
-        "newtonsoft.json.nuspec"
+        "newtonsoft.json.12.0.3.nupkg.sha512",
+        "newtonsoft.json.nuspec",
+        "packageIcon.png"
       ]
     },
     "Oracle.EntityFrameworkCore/5.21.61": {
@@ -7589,6 +7615,7 @@
   },
   "projectFileDependencyGroups": {
     "net5.0": [
+      "JsonWebTokens >= 4.0.0",
       "Microsoft.EntityFrameworkCore >= 5.0.17",
       "Microsoft.EntityFrameworkCore.SqlServer >= 5.0.17",
       "Microsoft.EntityFrameworkCore.Tools >= 5.0.17",
@@ -7599,20 +7626,30 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\15297\\.nuget\\packages\\": {}
+    "C:\\Users\\ASUS\\.nuget\\packages\\": {},
+    "F:\\C++\\NuGetPackages": {},
+    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\gitPro\\ChryDB\\DB_BACKEND\\Back\\Back.csproj",
+      "projectUniqueName": "C:\\Users\\ASUS\\Desktop\\back\\backCherry\\DB_BACKEND\\Back\\Back.csproj",
       "projectName": "Back",
-      "projectPath": "D:\\gitPro\\ChryDB\\DB_BACKEND\\Back\\Back.csproj",
-      "packagesPath": "C:\\Users\\15297\\.nuget\\packages\\",
-      "outputPath": "D:\\gitPro\\ChryDB\\DB_BACKEND\\Back\\obj\\",
+      "projectPath": "C:\\Users\\ASUS\\Desktop\\back\\backCherry\\DB_BACKEND\\Back\\Back.csproj",
+      "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\ASUS\\Desktop\\back\\backCherry\\DB_BACKEND\\Back\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "F:\\C++\\NuGetPackages",
+        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\15297\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
@@ -7637,6 +7674,10 @@
       "net5.0": {
         "targetAlias": "net5.0",
         "dependencies": {
+          "JsonWebTokens": {
+            "target": "Package",
+            "version": "[4.0.0, )"
+          },
           "Microsoft.EntityFrameworkCore": {
             "target": "Package",
             "version": "[5.0.17, )"
