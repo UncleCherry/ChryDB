@@ -26,6 +26,9 @@ namespace Back
         public LoginMessage()
         {
             errorCode = 300;
+            data.Add("loginState", false);
+            data.Add("userName", null);
+            data.Add("userAvatar", null);
         }
     }
 
@@ -86,6 +89,18 @@ namespace Back
         }
     }
 
+    public class StudentInfoMessage : Message
+    {
+        public StudentInfoMessage()
+        {
+            errorCode = 400;
+            data.Add("studentID", null);
+            data.Add("studentName", null);
+            data.Add("studentGrade", null);
+            data.Add("studentMajor", null);
+            data.Add("studentCredit", null);
+        }
+    }
     public class VerifyControllerMessage : Message
     {
         public VerifyControllerMessage()
