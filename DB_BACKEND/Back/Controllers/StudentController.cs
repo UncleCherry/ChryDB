@@ -22,9 +22,11 @@ namespace Back.Controllers
         {
             try
             {
-                //ModelContext context = new ModelContext();
-                var student = _Context.Users.
+                ModelContext context = new ModelContext();
+                var student = context.Users.
                     Single(b => b.UserId == account);
+                //var student = _Context.Users.
+                //    Single(b => b.UserId == account);
                 return student;
             }
             catch
@@ -38,9 +40,11 @@ namespace Back.Controllers
         {
             try
             {
-                //ModelContext context = new ModelContext();
-                var student = _Context.Students.
+                ModelContext context = new ModelContext();
+                var student = context.Students.
                     Single(b => b.StudentId == id);
+                //var student = _Context.Students.
+                //    Single(b => b.StudentId == id);
                 return student;
             }
             catch
