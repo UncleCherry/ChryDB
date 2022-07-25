@@ -464,3 +464,4 @@ C:\Users\ASUS\Desktop\back\backCherry\DB_BACKEND\Back\obj\ARM64\Debug\net5.0\Bac
 C:\Users\ASUS\Desktop\back\backCherry\DB_BACKEND\Back\obj\ARM64\Debug\net5.0\Back.csproj.CopyComplete
 C:\Users\ASUS\Desktop\back\backCherry\DB_BACKEND\Back\obj\ARM64\Debug\net5.0\Back.genruntimeconfig.cache
 C:\Users\ASUS\Desktop\back\backCherry\DB_BACKEND\Back\bin\ARM64\Debug\net5.0\JsonWebTokens.dll
+D:\gitPro\ChryDB\DB_BACKEND\Back\bin\ARM64\Debug\net5.0\JsonWebTokens.dll

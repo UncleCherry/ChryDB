@@ -13,12 +13,17 @@ namespace Back.Controllers
     [ApiController]
     public class StudentController : ControllerBase
     {
+        private  static ModelContext _Context;
+        public StudentController(ModelContext modelContext)
+        {
+            _Context = modelContext;
+        }
         public static User SearchByAccount(decimal account)
         {
             try
             {
-                ModelContext context = new ModelContext();
-                var student = context.Users.
+                //ModelContext context = new ModelContext();
+                var student = _Context.Users.
                     Single(b => b.UserId == account);
                 return student;
             }
@@ -29,12 +34,12 @@ namespace Back.Controllers
         }
 
         [HttpGet("hh")]
-        public Student SearchByID(decimal id)
+        public static Student SearchByID(decimal id)
         {
             try
             {
-                ModelContext context = new ModelContext();
-                var student = context.Students.
+                //ModelContext context = new ModelContext();
+                var student = _Context.Students.
                     Single(b => b.StudentId == id);
                 return student;
             }

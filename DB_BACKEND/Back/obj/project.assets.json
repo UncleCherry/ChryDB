@@ -7626,30 +7626,20 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ASUS\\.nuget\\packages\\": {},
-    "F:\\C++\\NuGetPackages": {},
-    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\15297\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ASUS\\Desktop\\back\\backCherry\\DB_BACKEND\\Back\\Back.csproj",
+      "projectUniqueName": "D:\\gitPro\\ChryDB\\DB_BACKEND\\Back\\Back.csproj",
       "projectName": "Back",
-      "projectPath": "C:\\Users\\ASUS\\Desktop\\back\\backCherry\\DB_BACKEND\\Back\\Back.csproj",
-      "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ASUS\\Desktop\\back\\backCherry\\DB_BACKEND\\Back\\obj\\",
+      "projectPath": "D:\\gitPro\\ChryDB\\DB_BACKEND\\Back\\Back.csproj",
+      "packagesPath": "C:\\Users\\15297\\.nuget\\packages\\",
+      "outputPath": "D:\\gitPro\\ChryDB\\DB_BACKEND\\Back\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "F:\\C++\\NuGetPackages",
-        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "C:\\Users\\15297\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
