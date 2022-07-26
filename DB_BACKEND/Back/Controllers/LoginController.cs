@@ -118,5 +118,42 @@ namespace Back.Controllers
             public decimal UserId { get; set; }
             public string Password { get; set; }
         }
+        [HttpPost("linq")]
+        public string studentLoginlinq()
+        {
+            LoginMessage loginMessage = new LoginMessage();
+            decimal account = decimal.Parse(Request.Form["account"]);
+            string password = Request.Form["password"];
+            if (account != null && password != null)
+            {
+                loginMessage.errorCode = 200;
+            }
+            var sUser = from s in _Context.Students
+                          join u in _Context.Users
+                          on s.StudentId equals u.UserId
+                          where s.StudentId==account && u.Password==password
+                          select u;
+            if (sUser!=null)
+            {
+                loginMessage.data["loginState"] = true;
+                loginMessage.data["UserName"] = sUser.FirstOrDefault().UserName;
+                var token = Token.GetToken(new TokenInfo
+                {
+                    id = account,
+                    password = password
+                });
+                loginMessage.data.Add("token", token);
+                CookieOptions cookieOptions = new CookieOptions();
+                cookieOptions.Path = "/";
+                cookieOptions.HttpOnly = false;
+                cookieOptions.SameSite = SameSiteMode.None;
+                cookieOptions.Secure = true;
+                cookieOptions.MaxAge = new TimeSpan(0, 10, 0);
+                Response.Cookies.Append("Token", token, cookieOptions);
+            }
+            var request = Request;
+           return loginMessage.ReturnJson();
+        }
     }
+
 }
