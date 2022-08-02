@@ -18,22 +18,6 @@ namespace Back.Controllers
         {
             _Context = modelContext;
         }
-        public static User SearchByAccount(decimal account)
-        {
-            try
-            {
-                ModelContext context = new ModelContext();
-                var student = context.Users.
-                    Single(b => b.UserId == account);
-                //var student = _Context.Users.
-                //    Single(b => b.UserId == account);
-                return student;
-            }
-            catch
-            {
-                return null;
-            }
-        }
 
         [HttpGet("hh")]
         public static Student SearchByID(decimal id)
@@ -53,21 +37,6 @@ namespace Back.Controllers
             }
         }
 
-        public static bool StudentLogin(User student, string password)
-        {
-            try
-            {
-                if (student == null)
-                {
-                    return false;
-                }
-                return student.Password == password;
-            }
-            catch
-            {
-                return false;
-            }
-        }
 
         [HttpGet("Info")]
 
@@ -82,7 +51,10 @@ namespace Back.Controllers
                 if (data != null)
                 {
                     decimal id = (decimal)data["id"];
-                    var student = SearchByID(id);
+                    var sUser = from s in _Context.Students
+                                    where s.StudentId == id
+                                    select s;
+                    Student student = sUser.FirstOrDefault();
                     if (student != null)
                     {
                         StudentMessage.errorCode = 200;
