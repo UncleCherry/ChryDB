@@ -37,41 +37,8 @@ namespace Back.Controllers
         {
             return "value";
         }
-
-        // POST api/<LoginController>
-        [HttpPost]
-        public String Post([FromBody] LoginInfo logininfo)
-        {
-            String a;
-            LoginMessage loginMessage = new LoginMessage();
-            if (logininfo.UserId != null && logininfo.Password != null)
-            {
-                loginMessage.errorCode = 200;
-            }
-            else
-            {
-                try
-                {
-                    var user = _Context.Users.Single(b => b.UserId == logininfo.UserId && b.Password == logininfo.Password);
-
-                        loginMessage.data.Add("token", 12345);
-                        loginMessage.data.Add("userid", user.UserId);
-                        loginMessage.data.Add("username", user.UserName);
-                        loginMessage.data.Add("usertype", user.UserType);
-                    
-                }
-                catch
-                {
-                    loginMessage.errorCode = 11111;
-
-                }
-            }
-               
-            return loginMessage.ReturnJson();
-        }
-
         [HttpPost("student")]
-        public string studentLogin()
+        public string StudentLogin()
         {
             LoginMessage loginMessage = new LoginMessage();
             string account = Request.Form["account"];
@@ -121,21 +88,57 @@ namespace Back.Controllers
             //var request = Request;
             return loginMessage.ReturnJson();
         }
-        // PUT api/<LoginController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPost("instructor")]
+        public string InstructorLogin()
         {
-        }
-
-        // DELETE api/<LoginController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-        public class LoginInfo
-        {
-            public decimal UserId { get; set; }
-            public string Password { get; set; }
+            LoginMessage loginMessage = new LoginMessage();
+            string account = Request.Form["account"];
+            decimal uid;
+            string password = Request.Form["password"];
+            if (account != null && password != null)
+            {
+                try
+                {
+                    uid = decimal.Parse(account);
+                }
+                catch
+                {
+                    loginMessage.errorCode = 201;//有account参数但其为空
+                    return loginMessage.ReturnJson();
+                }
+                loginMessage.errorCode = 200;
+            }
+            else
+            {
+                loginMessage.errorCode = 202;//有参数为空
+                return loginMessage.ReturnJson();
+            }
+            var iUser = from i in _Context.Instructors
+                        join u in _Context.Users
+                        on i.InstructorId equals u.UserId
+                        where i.InstructorId == uid && u.Password == password
+                        select u;
+            var instructor = iUser.FirstOrDefault();
+            if (instructor != null)
+            {
+                loginMessage.data["loginState"] = true;
+                loginMessage.data["UserName"] = instructor.UserName;
+                var token = Token.GetToken(new TokenInfo
+                {
+                    id = uid,
+                    password = password
+                });
+                loginMessage.data.Add("token", token);
+                CookieOptions cookieOptions = new CookieOptions();
+                cookieOptions.Path = "/";
+                cookieOptions.HttpOnly = false;
+                cookieOptions.SameSite = SameSiteMode.None;
+                cookieOptions.Secure = true;
+                cookieOptions.MaxAge = new TimeSpan(0, 10, 0);
+                Response.Cookies.Append("Token", token, cookieOptions);
+            }
+            //var request = Request;
+            return loginMessage.ReturnJson();
         }
     }
 
