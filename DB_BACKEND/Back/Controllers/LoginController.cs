@@ -74,16 +74,30 @@ namespace Back.Controllers
         public string studentLogin()
         {
             LoginMessage loginMessage = new LoginMessage();
-            decimal account = decimal.Parse(Request.Form["account"]);
+            string account = Request.Form["account"];
+            decimal uid;
             string password = Request.Form["password"];
             if (account != null && password != null)
             {
+                try
+                {
+                    uid = decimal.Parse(account);
+                }
+                catch
+                {
+                    loginMessage.errorCode = 201;//有account参数但其为空
+                    return loginMessage.ReturnJson();
+                }
                 loginMessage.errorCode = 200;
+            }else
+            {
+                loginMessage.errorCode = 202;//有参数为空
+                return loginMessage.ReturnJson();
             }
             var sUser = from s in _Context.Students
                         join u in _Context.Users
                         on s.StudentId equals u.UserId
-                        where s.StudentId == account && u.Password == password
+                        where s.StudentId == uid && u.Password == password
                         select u;
             var student = sUser.FirstOrDefault();
             if (student != null)
@@ -92,7 +106,7 @@ namespace Back.Controllers
                 loginMessage.data["UserName"] = student.UserName;
                 var token = Token.GetToken(new TokenInfo
                 {
-                    id = account,
+                    id = uid,
                     password = password
                 });
                 loginMessage.data.Add("token", token);
@@ -104,7 +118,7 @@ namespace Back.Controllers
                 cookieOptions.MaxAge = new TimeSpan(0, 10, 0);
                 Response.Cookies.Append("Token", token, cookieOptions);
             }
-            var request = Request;
+            //var request = Request;
             return loginMessage.ReturnJson();
         }
         // PUT api/<LoginController>/5

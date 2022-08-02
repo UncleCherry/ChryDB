@@ -19,12 +19,25 @@ namespace Back.Controllers
             _Context = modelContext;
         }
         [HttpPost]
-        public string UserRegister([FromBody] User u)
+        public string UserRegister()
         {
-            _Context.Users.Add(u);
+            Message message = new Message();
+            message.errorCode = 200;
+            decimal id = decimal.Parse(Request.Form["id"]);
+            string password = Request.Form["password"];
+            string username = Request.Form["username"];
+            if (_Context.Users.Find(id)!=null)//id已存在 =====这里需求不太清楚
+            {
+                message.errorCode = 400;
+                return message.ReturnJson();
+            }
+            User user = new User();
+            user.UserId = id;
+            user.Password = password;
+            user.UserName = username;
+            _Context.Users.Add(user);
             _Context.SaveChanges();
-
-            return "s";
+            return message.ReturnJson();
         }
         // GET: api/<RegisterController>
         [HttpGet]
