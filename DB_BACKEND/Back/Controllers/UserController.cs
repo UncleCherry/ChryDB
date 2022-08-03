@@ -74,5 +74,34 @@ namespace Back.Controllers
             }
             return message.ReturnJson();
         }
+        [HttpPut("password")]
+        public string ChangePassword()
+        {
+            Message message = new Message();
+            message.errorCode = 400;
+            StringValues token = default(StringValues);
+            if (Request.Headers.TryGetValue("token", out token))
+            {
+                var data = Token.VerifyToken(token);
+                if (data != null)
+                {
+                    decimal id = (decimal)data["id"];
+                    User user = _Context.Users.SingleOrDefault(x => x.UserId == id);
+                    if (user == null)
+                    {
+                        message.errorCode = 201;//没有对应id的用户
+                        return message.ReturnJson();
+                    }
+                    else
+                    {
+                        user.Password= Request.Form["password"];
+                        _Context.SaveChanges();
+                        message.errorCode = 200;
+                        return message.ReturnJson();
+                    }
+                }
+            }
+            return message.ReturnJson();
+        }
     }
 }
