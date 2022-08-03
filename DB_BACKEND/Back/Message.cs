@@ -29,6 +29,7 @@ namespace Back
             data.Add("loginState", false);
             data.Add("userName", null);
             data.Add("userAvatar", null);
+            data.Add("userType", null);
         }
     }
 

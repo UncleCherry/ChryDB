@@ -21,6 +21,56 @@ namespace Back.Controllers
         {
             _Context = modelContext;
         }
+        [HttpPost]
+        public string Login()
+        {
+            LoginMessage loginMessage = new LoginMessage();
+            string account = Request.Form["account"];
+            decimal uid;
+            string password = Request.Form["password"];
+            if (account != null && password != null)
+            {
+                try
+                {
+                    uid = decimal.Parse(account);
+                }
+                catch
+                {
+                    loginMessage.errorCode = 201;//有account参数但其为空
+                    return loginMessage.ReturnJson();
+                }
+                loginMessage.errorCode = 200;
+            }
+            else
+            {
+                loginMessage.errorCode = 202;//有参数为空
+                return loginMessage.ReturnJson();
+            }
+            var users = from u in _Context.Users
+                        where u.UserId == uid && u.Password == password
+                        select u;
+            var user = users.FirstOrDefault();
+            if (user != null)
+            {
+                loginMessage.data["loginState"] = true;
+                loginMessage.data["userName"] = user.UserName;
+                loginMessage.data["userType"] = user.UserType;
+                var token = Token.GetToken(new TokenInfo
+                {
+                    id = uid,
+                    password = password
+                });
+                loginMessage.data.Add("token", token);
+                CookieOptions cookieOptions = new CookieOptions();
+                cookieOptions.Path = "/";
+                cookieOptions.HttpOnly = false;
+                cookieOptions.SameSite = SameSiteMode.None;
+                cookieOptions.Secure = true;
+                cookieOptions.MaxAge = new TimeSpan(0, 10, 0);
+                Response.Cookies.Append("Token", token, cookieOptions);
+            }
+            return loginMessage.ReturnJson();
+        }
         // GET: api/<LoginController>
         [HttpGet]
         public User Get()
