@@ -26,9 +26,17 @@ namespace Back.Controllers
             decimal id = decimal.Parse(Request.Form["id"]);
             string password = Request.Form["password"];
             string username = Request.Form["username"];
-            if (_Context.Users.Find(id)!=null)//id已存在 =====这里需求不太清楚
+            string name = Request.Form["name"];
+            decimal grade= decimal.Parse(Request.Form["grade"]);
+            string major= Request.Form["major"];
+            if (_Context.Users.Find(id) != null)//id已存在 
             {
-                message.errorCode = 400;
+                message.errorCode = 401;
+                return message.ReturnJson();
+            }
+            if (_Context.Users.Any(x => x.UserName == username))//用户名已存在 
+            {
+                message.errorCode = 402;
                 return message.ReturnJson();
             }
             User user = new User();
@@ -38,8 +46,9 @@ namespace Back.Controllers
             user.UserName = username;
             user.UserType = 0;//0为学生
             student.StudentId = id;
-            student.Name = username;
-            _Context.Users.Add(user);
+            student.Name = name;
+            student.Grade = grade;
+            student.Major = major;
             _Context.Students.Add(student);
             _Context.Users.Add(user);
             _Context.SaveChanges();
@@ -76,6 +85,40 @@ namespace Back.Controllers
             instructor.Department = department;
             _Context.Users.Add(user);
             _Context.Instructors.Add(instructor);
+            _Context.SaveChanges();
+            return message.ReturnJson();
+        }
+        [HttpPost("admin")]
+        public string AdminrRegister()
+        {
+            Message message = new Message();
+            message.errorCode = 200;
+            decimal id = decimal.Parse(Request.Form["id"]);
+            string password = Request.Form["password"];
+            string username = Request.Form["username"];
+            string name = Request.Form["name"];
+            string department = Request.Form["department"];
+            if (_Context.Users.Find(id) != null)//id已存在 
+            {
+                message.errorCode = 401;
+                return message.ReturnJson();
+            }
+            if (_Context.Users.Any(x => x.UserName == username))//用户名已存在 
+            {
+                message.errorCode = 402;
+                return message.ReturnJson();
+            }
+            User user = new User();
+            Admin admin = new Admin();
+            user.UserId = id;
+            user.Password = password;
+            user.UserName = username;
+            user.UserType = 1;//1为教师
+            admin.AdminId = id;
+            admin.Name = name;
+            admin.Department = department;
+            _Context.Users.Add(user);
+            _Context.Admins.Add(admin);
             _Context.SaveChanges();
             return message.ReturnJson();
         }
