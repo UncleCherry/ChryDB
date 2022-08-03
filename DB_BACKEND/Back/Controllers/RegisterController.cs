@@ -53,10 +53,16 @@ namespace Back.Controllers
             decimal id = decimal.Parse(Request.Form["id"]);
             string password = Request.Form["password"];
             string username = Request.Form["username"];
+            string name = Request.Form["name"];
             string department = Request.Form["department"];
-            if (_Context.Users.Find(id) != null)//id已存在 =====这里需求不太清楚
+            if (_Context.Users.Find(id) != null)//id已存在 
             {
-                message.errorCode = 400;
+                message.errorCode = 401;
+                return message.ReturnJson();
+            }
+            if(_Context.Users.Any(x => x.UserName == username))//用户名已存在 
+            {
+                message.errorCode = 402;
                 return message.ReturnJson();
             }
             User user = new User();
@@ -66,7 +72,7 @@ namespace Back.Controllers
             user.UserName = username;
             user.UserType = 1;//1为教师
             instructor.InstructorId = id;
-            instructor.Name = username;
+            instructor.Name = name;
             instructor.Department = department;
             _Context.Users.Add(user);
             _Context.Instructors.Add(instructor);

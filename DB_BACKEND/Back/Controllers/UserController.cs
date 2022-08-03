@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Back.Entity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -45,11 +46,33 @@ namespace Back.Controllers
         }
 
         // DELETE api/<UserController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete]
+        public string Delete()
         {
+            Message message = new Message();
+            StringValues token = default(StringValues);
+            if (Request.Headers.TryGetValue("token", out token))
+            {
+                message.errorCode = 300;
+                var data = Token.VerifyToken(token);
+                if (data != null)
+                {
+                    decimal id = (decimal)data["id"];
+                    User user = _Context.Users.SingleOrDefault(x => x.UserId == id);
+                    if (user == null)
+                    {
+                        message.errorCode = 201;//没有对应id的用户
+                        return message.ReturnJson();
+                    }
+                    else {
+                        _Context.Users.Remove(user);
+                        _Context.SaveChanges();
+                        message.errorCode = 200;
+                        return message.ReturnJson();
+                    }
+                }
+            }
+            return message.ReturnJson();
         }
-
-
     }
 }
