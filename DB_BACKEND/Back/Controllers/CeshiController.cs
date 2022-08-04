@@ -32,5 +32,16 @@ namespace Back.Controllers
            // _Context.SaveChanges();
             return us;
         }
+        [HttpPost]
+        public string PostCourse()
+        {
+            Message message = new Message();
+            Course c = new Course();
+            c.CourseName = "abcd";
+            _Context.Courses.Add(c);
+            _Context.SaveChanges();
+            message.errorCode = 200;
+            return message.ReturnJson();
+        }
     }
 }

@@ -33,7 +33,7 @@ namespace Back
             //options.UseOracle(Configuration.GetConnectionString("OracleDBContext"), b => b.UseOracleSQLCompatibility("12")));
             //
             // services.AddScoped<ModelContext>();
-            services.AddSingleton(typeof(ModelContext));//ÒÀÀµ×¢Èëµ¥Àý
+            services.AddScoped(typeof(ModelContext));//ÒÀÀµ×¢ÈëÓòÄ£Ê½µ¥Àý
             services.AddControllers();
             //ÅäÖÃ¿çÓò
             services.AddCors(op => {
