@@ -32,6 +32,7 @@ namespace Back.Controllers
            // _Context.SaveChanges();
             return us;
         }
+        //对于数据库自增id的测试
         [HttpPost]
         public string PostCourse()
         {
