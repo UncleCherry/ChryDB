@@ -64,6 +64,11 @@ namespace Back.Controllers
                         StudentMessage.data["studentMajor"] = student.Major;
                         StudentMessage.data["studentCredit"] = student.Credit;
                     }
+                    else
+                    {
+                        StudentMessage.errorCode = 201;
+                        return StudentMessage.ReturnJson();
+                    }
 
                 }
             }
