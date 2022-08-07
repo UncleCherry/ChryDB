@@ -20,11 +20,14 @@ namespace Back.Controllers
         {
             _Context = modelContext;
         }
-        // GET: api/<CourseController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        // 获取所有课程信息
+        [HttpGet("all")]
+        public string GetAllCourses()
         {
-            return new string[] { "value1", "value2" };
+            Message message = new Message();
+            message.data.Add("CoursesList", new List<Course>());
+            message.data["CoursesList"]=_Context.Courses.ToList();
+            return message.ReturnJson();
         }
 
         // GET api/<CourseController>/5
