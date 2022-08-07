@@ -30,11 +30,46 @@ namespace Back.Controllers
             return message.ReturnJson();
         }
 
-        // GET api/<CourseController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // 获取学生选课信息
+        [HttpGet("student")]
+        public string GetStudentCourses()
         {
-            return "value";
+            Message message = new Message();
+            message.errorCode = 300;
+            message.data.Add("CoursesList", new List<Course>());
+            StringValues token = default(StringValues);
+            if (Request.Headers.TryGetValue("token", out token))//验证token学生身份
+            {
+
+                var data = Token.VerifyToken(token);
+                if (data != null)
+                {
+                    decimal id = (decimal)data["id"];
+                    var sUser = from s in _Context.Users
+                                where s.UserId == id && s.UserType == 0
+                                select s;
+                    User student = sUser.FirstOrDefault();
+                    if (student != null)
+                    {
+                        //验证学生身份成功
+                        //搜索课表
+                        var courses = from t in _Context.Takes
+                                      join c in _Context.Courses
+                                      on t.CourseId equals c.CourseId
+                                      where t.StudentId == student.UserId
+                                      select c;
+                        message.data["CoursesList"] = courses.ToList();
+                        message.errorCode = 200;
+                        return message.ReturnJson();
+                    }
+                    else
+                    {
+                        message.errorCode = 201;//身份验证失败
+                        return message.ReturnJson();
+                    }
+                }
+            }
+            return message.ReturnJson();
         }
 
         // 教务创建添加课程
