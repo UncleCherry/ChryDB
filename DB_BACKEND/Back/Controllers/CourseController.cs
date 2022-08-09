@@ -71,7 +71,47 @@ namespace Back.Controllers
             }
             return message.ReturnJson();
         }
+        // 获取教师授课信息
+        [HttpGet("instructor")]
+        public string GetInstructorCourses()
+        {
+            Message message = new Message();
+            message.errorCode = 300;
+            message.data.Add("CoursesList", new List<Course>());
+            StringValues token = default(StringValues);
+            if (Request.Headers.TryGetValue("token", out token))//验证token教师身份
+            {
 
+                var data = Token.VerifyToken(token);
+                if (data != null)
+                {
+                    decimal id = (decimal)data["id"];
+                    var iUser = from i in _Context.Users
+                                where i.UserId == id && i.UserType == 1
+                                select i;
+                    User ins = iUser.FirstOrDefault();
+                    if (ins != null)
+                    {
+                        //验证教师身份成功
+                        //搜索课表
+                        var courses = from i in _Context.Instructs
+                                      join c in _Context.Courses
+                                      on i.CourseId equals c.CourseId
+                                      where i.InstructorId == ins.UserId
+                                      select c;
+                        message.data["CoursesList"] = courses.ToList();
+                        message.errorCode = 200;
+                        return message.ReturnJson();
+                    }
+                    else
+                    {
+                        message.errorCode = 201;//身份验证失败
+                        return message.ReturnJson();
+                    }
+                }
+            }
+            return message.ReturnJson();
+        }
         // 教务创建添加课程
         [HttpPost("create")]
         public string PostCourse()
