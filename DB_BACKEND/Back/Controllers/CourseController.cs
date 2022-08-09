@@ -50,7 +50,35 @@ namespace Back.Controllers
             }).ToList();
             return message.ReturnJson();
         }
+        //根据id获取单个课程信息
+        [HttpGet("getinfo")]
+        public string GetCourseInfo()
+        {
 
+            CourseInfoMessage CourseInfo = new CourseInfoMessage();
+            decimal courseid = decimal.Parse(Request.Form["courseid"]);
+            var course=_Context.Courses.Find(courseid);
+            //查找有无对应课程
+            if (course != null)
+            {
+                CourseInfo.data["courseid"] = course.CourseId;
+                CourseInfo.data["coursename"] = course.CourseName;
+                CourseInfo.data["timeslot"] = course.TimeSlot;
+                CourseInfo.data["credit"] = course.Credit;
+                CourseInfo.data["isrequired"] = course.IsRequired;
+                CourseInfo.data["year"] = course.Year;
+                CourseInfo.data["semester"] = course.Semester;
+                CourseInfo.data["meetingid"] = course.MeetingId;
+                CourseInfo.errorCode = 200;
+                return CourseInfo.ReturnJson();
+            }
+            else
+            {
+                CourseInfo.errorCode = 203;//无对应课程
+                return CourseInfo.ReturnJson();
+            }
+            return CourseInfo.ReturnJson();
+        }
         // 获取学生选课信息
         [HttpGet("student")]
         public string GetStudentCourses()
@@ -455,17 +483,5 @@ namespace Back.Controllers
             }
             return message.ReturnJson();
         }
-        // PUT api/<CourseController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<CourseController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-
     }
 }
