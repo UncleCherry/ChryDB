@@ -25,6 +25,7 @@ namespace Back.Controllers
             public DateTime? StartTime { get; set; }
             public DateTime? EndTime { get; set; }
             public int? MeetingId { get; set; }
+            public string CourseName { get; set; }
         }
         // 获取所有考试信息
         [HttpGet("all")]
@@ -32,6 +33,18 @@ namespace Back.Controllers
         {
             Message message = new Message();
             message.data.Add("ExamsList", new List<ExamInfo>());
+            var exams = from e in _Context.Exams
+                        join c in _Context.Courses
+                        on e.CourseId equals c.CourseId
+                        select new ExamInfo{
+                            ExamId = e.ExamId,
+                            CourseId = e.CourseId,
+                            StartTime = e.StartTime,
+                            EndTime = e.EndTime,
+                            MeetingId = e.MeetingId,
+                            CourseName=c.CourseName
+                        };
+            /*
             message.data["ExamsList"] = _Context.Exams.Select(e => new ExamInfo
             {
                 ExamId = e.ExamId,
@@ -39,7 +52,8 @@ namespace Back.Controllers
                 StartTime=e.StartTime,
                 EndTime=e.EndTime,
                 MeetingId=e.MeetingId
-            }).ToList();
+            }).ToList();*/
+            message.data["ExamsList"] = exams.ToList();
             return message.ReturnJson();
         }
 
