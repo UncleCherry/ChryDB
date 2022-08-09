@@ -18,13 +18,28 @@ namespace Back.Controllers
         {
             _Context = modelContext;
         }
+        private class ExamInfo
+        {
+            public decimal ExamId { get; set; }
+            public decimal? CourseId { get; set; }
+            public DateTime? StartTime { get; set; }
+            public DateTime? EndTime { get; set; }
+            public int? MeetingId { get; set; }
+        }
         // 获取所有考试信息
         [HttpGet("all")]
         public string GetAllExams()
         {
             Message message = new Message();
-            message.data.Add("ExamsList", new List<Exam>());
-            message.data["ExamsList"] = _Context.Exams.ToList();
+            message.data.Add("ExamsList", new List<ExamInfo>());
+            message.data["ExamsList"] = _Context.Exams.Select(e => new ExamInfo
+            {
+                ExamId = e.ExamId,
+                CourseId =e.CourseId,
+                StartTime=e.StartTime,
+                EndTime=e.EndTime,
+                MeetingId=e.MeetingId
+            }).ToList();
             return message.ReturnJson();
         }
 
