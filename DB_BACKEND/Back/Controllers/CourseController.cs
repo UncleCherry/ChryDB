@@ -55,29 +55,31 @@ namespace Back.Controllers
         public string GetCourseInfo()
         {
 
-            CourseInfoMessage CourseInfo = new CourseInfoMessage();
+            Message message = new Message();
+            CourseInfo cinfo = new CourseInfo();
             decimal courseid = decimal.Parse(Request.Form["courseid"]);
             var course=_Context.Courses.Find(courseid);
             //查找有无对应课程
             if (course != null)
             {
-                CourseInfo.data["courseid"] = course.CourseId;
-                CourseInfo.data["coursename"] = course.CourseName;
-                CourseInfo.data["timeslot"] = course.TimeSlot;
-                CourseInfo.data["credit"] = course.Credit;
-                CourseInfo.data["isrequired"] = course.IsRequired;
-                CourseInfo.data["year"] = course.Year;
-                CourseInfo.data["semester"] = course.Semester;
-                CourseInfo.data["meetingid"] = course.MeetingId;
-                CourseInfo.errorCode = 200;
-                return CourseInfo.ReturnJson();
+                cinfo.CourseId = course.CourseId;
+                cinfo.CourseName = course.CourseName;
+                cinfo.TimeSlot = course.TimeSlot;
+                cinfo.Credit = course.Credit;
+                cinfo.IsRequired = course.IsRequired;
+                cinfo.Year = course.Year;
+                cinfo.Semester = course.Semester;
+                cinfo.MeetingId = course.MeetingId;
+                message.data.Add("course", cinfo);
+                message.errorCode = 200;
+                return message.ReturnJson();
             }
             else
             {
-                CourseInfo.errorCode = 203;//无对应课程
-                return CourseInfo.ReturnJson();
+                message.errorCode = 203;//无对应课程
+                return message.ReturnJson();
             }
-            return CourseInfo.ReturnJson();
+            return message.ReturnJson();
         }
         // 获取学生选课信息
         [HttpGet("student")]
