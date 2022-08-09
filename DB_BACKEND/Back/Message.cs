@@ -75,5 +75,20 @@ namespace Back
         }
 
     }
+    public class CourseInfoMessage : Message
+    {
+        public CourseInfoMessage()
+        {
+            errorCode = 300;
+            data.Add("courseid", null);
+            data.Add("coursename", null);
+            data.Add("timeslot", null);
+            data.Add("credit", null);
+            data.Add("isrequired", null);
+            data.Add("year", null);
+            data.Add("semester", null);
+            data.Add("meetingid", null);
 
+        }
+    }
 }
