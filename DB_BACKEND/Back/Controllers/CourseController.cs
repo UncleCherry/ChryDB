@@ -20,13 +20,34 @@ namespace Back.Controllers
         {
             _Context = modelContext;
         }
+        private class CourseInfo
+        {
+            public decimal CourseId { get; set; }
+            public string CourseName { get; set; }
+            public string TimeSlot { get; set; }
+            public byte? Credit { get; set; }
+            public bool? IsRequired { get; set; }
+            public string Year { get; set; }
+            public string Semester { get; set; }
+            public int? MeetingId { get; set; }
+        }
         // 获取所有课程信息
         [HttpGet("all")]
         public string GetAllCourses()
         {
             Message message = new Message();
             message.data.Add("CoursesList", new List<Course>());
-            message.data["CoursesList"]=_Context.Courses.ToList();
+            message.data["CoursesList"]=_Context.Courses.Select(c=>new CourseInfo
+            {
+                CourseId=c.CourseId,
+                CourseName=c.CourseName,
+                TimeSlot=c.TimeSlot,
+                Credit=c.Credit,
+                IsRequired=c.IsRequired,
+                Year=c.Year,
+                Semester=c.Semester,
+                MeetingId=c.MeetingId
+            }).ToList();
             return message.ReturnJson();
         }
 
@@ -58,7 +79,17 @@ namespace Back.Controllers
                                       on t.CourseId equals c.CourseId
                                       where t.StudentId == student.UserId
                                       select c;
-                        message.data["CoursesList"] = courses.ToList();
+                        message.data["CoursesList"] = courses.Select(c => new CourseInfo
+                        {
+                            CourseId = c.CourseId,
+                            CourseName = c.CourseName,
+                            TimeSlot = c.TimeSlot,
+                            Credit = c.Credit,
+                            IsRequired = c.IsRequired,
+                            Year = c.Year,
+                            Semester = c.Semester,
+                            MeetingId = c.MeetingId
+                        }).ToList();
                         message.errorCode = 200;
                         return message.ReturnJson();
                     }
@@ -99,7 +130,17 @@ namespace Back.Controllers
                                       on i.CourseId equals c.CourseId
                                       where i.InstructorId == ins.UserId
                                       select c;
-                        message.data["CoursesList"] = courses.ToList();
+                        message.data["CoursesList"] = courses.Select(c => new CourseInfo
+                        {
+                            CourseId = c.CourseId,
+                            CourseName = c.CourseName,
+                            TimeSlot = c.TimeSlot,
+                            Credit = c.Credit,
+                            IsRequired = c.IsRequired,
+                            Year = c.Year,
+                            Semester = c.Semester,
+                            MeetingId = c.MeetingId
+                        }).ToList();
                         message.errorCode = 200;
                         return message.ReturnJson();
                     }
