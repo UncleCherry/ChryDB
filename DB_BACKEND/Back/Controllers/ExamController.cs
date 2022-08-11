@@ -56,6 +56,57 @@ namespace Back.Controllers
             message.data["ExamsList"] = exams.ToList();
             return message.ReturnJson();
         }
+        //获取学生考试信息
+        [HttpGet("student")]
+        public string GetStudentExams()
+        {
+            Message message = new Message();
+            message.errorCode = 300;
+            message.data.Add("ExamsList", new List<ExamInfo>());
+            StringValues token = default(StringValues);
+            if (Request.Headers.TryGetValue("token", out token))//验证token学生身份
+            {
+
+                var data = Token.VerifyToken(token);
+                if (data != null)
+                {
+                    decimal id = (decimal)data["id"];
+                    var sUser = from s in _Context.Users
+                                where s.UserId == id && s.UserType == 0
+                                select s;
+                    User student = sUser.FirstOrDefault();
+                    if (student != null)
+                    {
+                        //验证学生身份成功
+                        //搜索考试表
+                        var exams= from t in _Context.Takes
+                                   join e in _Context.Exams
+                                   on t.CourseId equals e.CourseId
+                                   join c in _Context.Courses
+                                   on e.CourseId equals c.CourseId
+                                   where t.StudentId == student.UserId
+                                   select new ExamInfo
+                                   {
+                                       ExamId = e.ExamId,
+                                       CourseId = e.CourseId,
+                                       StartTime = e.StartTime,
+                                       EndTime = e.EndTime,
+                                       MeetingId = e.MeetingId,
+                                       CourseName = c.CourseName
+                                   };
+                        message.data["ExamsList"] = exams.ToList();
+                        message.errorCode = 200;
+                        return message.ReturnJson();
+                    }
+                    else
+                    {
+                        message.errorCode = 201;//身份验证失败
+                        return message.ReturnJson();
+                    }
+                }
+            }
+            return message.ReturnJson();
+        }
 
         // 教务创建添加考试
         [HttpPost("create")]
