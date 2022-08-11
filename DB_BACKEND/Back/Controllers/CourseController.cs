@@ -20,16 +20,67 @@ namespace Back.Controllers
         {
             _Context = modelContext;
         }
+        private class CourseInfo
+        {
+            public decimal CourseId { get; set; }
+            public string CourseName { get; set; }
+            public string TimeSlot { get; set; }
+            public byte? Credit { get; set; }
+            public bool? IsRequired { get; set; }
+            public string Year { get; set; }
+            public string Semester { get; set; }
+            public int? MeetingId { get; set; }
+        }
         // 获取所有课程信息
         [HttpGet("all")]
         public string GetAllCourses()
         {
             Message message = new Message();
             message.data.Add("CoursesList", new List<Course>());
-            message.data["CoursesList"]=_Context.Courses.ToList();
+            message.data["CoursesList"]=_Context.Courses.Select(c=>new CourseInfo
+            {
+                CourseId=c.CourseId,
+                CourseName=c.CourseName,
+                TimeSlot=c.TimeSlot,
+                Credit=c.Credit,
+                IsRequired=c.IsRequired,
+                Year=c.Year,
+                Semester=c.Semester,
+                MeetingId=c.MeetingId
+            }).ToList();
             return message.ReturnJson();
         }
+        //根据id获取单个课程信息
+        [HttpGet("getinfo")]
+        public string GetCourseInfo()
+        {
 
+            Message message = new Message();
+            CourseInfo cinfo = new CourseInfo();
+            decimal courseid = decimal.Parse(Request.Form["courseid"]);
+            var course=_Context.Courses.Find(courseid);
+            //查找有无对应课程
+            if (course != null)
+            {
+                cinfo.CourseId = course.CourseId;
+                cinfo.CourseName = course.CourseName;
+                cinfo.TimeSlot = course.TimeSlot;
+                cinfo.Credit = course.Credit;
+                cinfo.IsRequired = course.IsRequired;
+                cinfo.Year = course.Year;
+                cinfo.Semester = course.Semester;
+                cinfo.MeetingId = course.MeetingId;
+                message.data.Add("course", cinfo);
+                message.errorCode = 200;
+                return message.ReturnJson();
+            }
+            else
+            {
+                message.errorCode = 203;//无对应课程
+                return message.ReturnJson();
+            }
+            return message.ReturnJson();
+        }
         // 获取学生选课信息
         [HttpGet("student")]
         public string GetStudentCourses()
@@ -58,7 +109,17 @@ namespace Back.Controllers
                                       on t.CourseId equals c.CourseId
                                       where t.StudentId == student.UserId
                                       select c;
-                        message.data["CoursesList"] = courses.ToList();
+                        message.data["CoursesList"] = courses.Select(c => new CourseInfo
+                        {
+                            CourseId = c.CourseId,
+                            CourseName = c.CourseName,
+                            TimeSlot = c.TimeSlot,
+                            Credit = c.Credit,
+                            IsRequired = c.IsRequired,
+                            Year = c.Year,
+                            Semester = c.Semester,
+                            MeetingId = c.MeetingId
+                        }).ToList();
                         message.errorCode = 200;
                         return message.ReturnJson();
                     }
@@ -99,7 +160,17 @@ namespace Back.Controllers
                                       on i.CourseId equals c.CourseId
                                       where i.InstructorId == ins.UserId
                                       select c;
-                        message.data["CoursesList"] = courses.ToList();
+                        message.data["CoursesList"] = courses.Select(c => new CourseInfo
+                        {
+                            CourseId = c.CourseId,
+                            CourseName = c.CourseName,
+                            TimeSlot = c.TimeSlot,
+                            Credit = c.Credit,
+                            IsRequired = c.IsRequired,
+                            Year = c.Year,
+                            Semester = c.Semester,
+                            MeetingId = c.MeetingId
+                        }).ToList();
                         message.errorCode = 200;
                         return message.ReturnJson();
                     }
@@ -414,17 +485,5 @@ namespace Back.Controllers
             }
             return message.ReturnJson();
         }
-        // PUT api/<CourseController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<CourseController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-
     }
 }
