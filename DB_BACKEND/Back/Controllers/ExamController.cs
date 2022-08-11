@@ -56,6 +56,39 @@ namespace Back.Controllers
             message.data["ExamsList"] = exams.ToList();
             return message.ReturnJson();
         }
+        //根据id获取单个考试信息
+        [HttpGet("getinfo")]
+        public string GetExamInfo()
+        {
+
+            Message message = new Message();
+            ExamInfo einfo = new ExamInfo();
+            decimal examid = decimal.Parse(Request.Form["examid"]);
+            var exam = _Context.Exams.Find(examid);
+            //查找有无对应考试
+            if (exam != null)
+            {
+                var examinfo = from c in _Context.Courses
+                            select new ExamInfo
+                            {
+                                ExamId = exam.ExamId,
+                                CourseId = exam.CourseId,
+                                StartTime = exam.StartTime,
+                                EndTime = exam.EndTime,
+                                MeetingId = exam.MeetingId,
+                                CourseName = c.CourseName
+                            };
+                einfo = examinfo.FirstOrDefault();
+                message.data.Add("exam", einfo);
+                message.errorCode = 200;
+                return message.ReturnJson();
+            }
+            else
+            {
+                message.errorCode = 203;//无对应考试
+                return message.ReturnJson();
+            }
+        }
         //获取学生考试信息
         [HttpGet("student")]
         public string GetStudentExams()
@@ -153,6 +186,73 @@ namespace Back.Controllers
                         }
                         message.errorCode = 200;
                         return message.ReturnJson();
+                    }
+                    else
+                    {
+                        message.errorCode = 201;//身份验证失败
+                        return message.ReturnJson();
+
+                    }
+                }
+            }
+            return message.ReturnJson();
+        }
+        // 教务修改考试
+        [HttpPut("alt")]
+        public string AltExam()
+        {
+
+            Message message = new Message();
+            message.errorCode = 300;
+            StringValues token = default(StringValues);
+            if (Request.Headers.TryGetValue("token", out token))//验证token教务身份
+            {
+
+                var data = Token.VerifyToken(token);
+                if (data != null)
+                {
+                    decimal id = (decimal)data["id"];
+                    var aUser = from a in _Context.Users
+                                where a.UserId == id && a.UserType == 2
+                                select a;
+                    User admin = aUser.FirstOrDefault();
+                    if (admin != null)
+                    {
+                        //验证教务身份成功
+                        //修改考试信息
+                        decimal examid = decimal.Parse(Request.Form["examid"]);
+
+                        //查找有无对应考试
+                        Exam exam = _Context.Exams.Find(examid);
+                        if (exam!= null)
+                        {
+                            //对Exam表改
+                            //decimal courseid = Decimal.Parse(Request.Form["courseid"]);
+                            int meetingid = int.Parse(Request.Form["meetingid"]);
+                            // 格式：2022-08-08T21:00:00
+                            DateTime starttime = DateTime.Parse(Request.Form["starttime"]);
+                            DateTime endtime = DateTime.Parse(Request.Form["endtime"]);
+                            //exam.CourseId = courseid;
+                            exam.StartTime = starttime;
+                            exam.EndTime = endtime;
+                            exam.MeetingId = meetingid;
+                            try
+                            {
+                                _Context.SaveChanges();
+                            }
+                            catch
+                            {
+                                message.errorCode = 202;//数据库更新失败
+                                return message.ReturnJson();
+                            }
+                            message.errorCode = 200;
+                            return message.ReturnJson();
+                        }
+                        else
+                        {
+                            message.errorCode = 203;//无对应考试
+                            return message.ReturnJson();
+                        }
                     }
                     else
                     {
