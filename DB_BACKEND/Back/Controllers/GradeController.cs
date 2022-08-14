@@ -71,5 +71,126 @@ namespace Back.Controllers
             }
             return message.ReturnJson();
         }
+        // 老师修改成绩
+        [HttpPut("alt")]
+        public string AltGrade()
+        {
+
+            Message message = new Message();
+            message.errorCode = 300;
+            StringValues token = default(StringValues);
+            if (Request.Headers.TryGetValue("token", out token))//验证token老师身份
+            {
+
+                var data = Token.VerifyToken(token);
+                if (data != null)
+                {
+                    decimal id = (decimal)data["id"];
+                    var iUser = from i in _Context.Users
+                                where i.UserId == id && i.UserType == 1
+                                select i;
+                    User ins = iUser.FirstOrDefault();
+                    if (ins != null)
+                    {
+                        //验证老师身份成功
+                        //修改成绩信息
+                        decimal examid = Decimal.Parse(Request.Form["examid"]);
+                        decimal studentid = Decimal.Parse(Request.Form["studentid"]);
+                        byte examgrade = byte.Parse(Request.Form["grade"]);
+                        //查找有无对应成绩记录
+                        Grade grade = _Context.Grades.Find(examid,studentid);
+                        if (grade != null)
+                        {
+                            //对grade表改
+                            grade.ExamId = examid;
+                            grade.StudentId = studentid;
+                            grade.Grade_ = examgrade;
+                            try
+                            {
+                                _Context.SaveChanges();
+                            }
+                            catch
+                            {
+                                message.errorCode = 202;//数据库更新失败
+                                return message.ReturnJson();
+                            }
+                            message.errorCode = 200;
+                            return message.ReturnJson();
+                        }
+                        else
+                        {
+                            message.errorCode = 203;//无对应记录
+                            return message.ReturnJson();
+                        }
+                    }
+                    else
+                    {
+                        message.errorCode = 201;//身份验证失败
+                        return message.ReturnJson();
+
+                    }
+                }
+            }
+            return message.ReturnJson();
+        }
+        // 老师删除成绩
+        [HttpDelete("del")]
+        public string DelGrade()
+        {
+
+            Message message = new Message();
+            message.errorCode = 300;
+            StringValues token = default(StringValues);
+            if (Request.Headers.TryGetValue("token", out token))//验证token老师身份
+            {
+
+                var data = Token.VerifyToken(token);
+                if (data != null)
+                {
+                    decimal id = (decimal)data["id"];
+                    var iUser = from i in _Context.Users
+                                where i.UserId == id && i.UserType == 1
+                                select i;
+                    User ins = iUser.FirstOrDefault();
+                    if (ins != null)
+                    {
+                        //验证老师身份成功
+                        //删除成绩记录
+                        decimal examid = Decimal.Parse(Request.Form["examid"]);
+                        decimal studentid = Decimal.Parse(Request.Form["studentid"]);
+                        //查找有无对应成绩记录
+                        Grade grade = _Context.Grades.Find(examid, studentid);
+                        if (grade != null)
+                        {
+                            //对grade表删
+                            try
+                            {
+                                _Context.Remove(grade);
+                                _Context.SaveChanges();
+                            }
+                            catch
+                            {
+                                message.errorCode = 202;//数据库更新失败
+                                return message.ReturnJson();
+                            }
+                            message.errorCode = 200;
+                            return message.ReturnJson();
+                        }
+                        else
+                        {
+                            message.errorCode = 203;//无对应记录
+                            return message.ReturnJson();
+                        }
+                    }
+                    else
+                    {
+                        message.errorCode = 201;//身份验证失败
+                        return message.ReturnJson();
+
+                    }
+                }
+            }
+            return message.ReturnJson();
+        }
     }
 }
