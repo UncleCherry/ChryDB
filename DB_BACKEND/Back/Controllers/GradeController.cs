@@ -192,5 +192,72 @@ namespace Back.Controllers
             }
             return message.ReturnJson();
         }
+
+        //带课程名的成绩信息
+        private class GradeInfo
+        {
+            public decimal? CourseId { get; set; }
+            public string CourseName { get; set; }
+            public decimal ExamId { get; set; }
+            public decimal StudentId { get; set; }
+            public string StudentName { get; set; }
+            public byte? Grade { get; set; }
+        }
+        //学生获取所有成绩信息
+        [HttpGet("student")]
+        public string StudentGrades()
+        {
+            Message message = new Message();
+            message.errorCode = 300;
+            StringValues token = default(StringValues);
+            if (Request.Headers.TryGetValue("token", out token))//验证token学生身份
+            {
+
+                var data = Token.VerifyToken(token);
+                if (data != null)
+                {
+                    decimal id = (decimal)data["id"];
+                    var sUser = from s in _Context.Users
+                                where s.UserId == id && s.UserType == 0
+                                select s;
+                    User student = sUser.FirstOrDefault();
+                    if (student != null)
+                    {
+                        Student stu = _Context.Students.Find(id);
+                        if (stu == null) {
+                            message.errorCode = 201;//身份验证失败
+                            return message.ReturnJson();
+                        }
+                        //验证学生身份成功
+                        var grades = _Context.Grades.Where(g => g.StudentId == id);//查出该学生的所有成绩
+                        var gradeswithname = from g in grades
+                                             join e in _Context.Exams
+                                             on g.ExamId equals e.ExamId
+                                             join c in _Context.Courses
+                                             on e.CourseId equals c.CourseId
+                                             select new GradeInfo
+                                             {
+                                                 CourseId = c.CourseId,
+                                                 CourseName=c.CourseName,
+                                                 ExamId=e.ExamId,
+                                                 StudentId=stu.StudentId,
+                                                 StudentName=stu.Name,
+                                                 Grade=g.Grade_
+                                             };
+                        message.errorCode = 200;
+                        message.data["GradesList"] = gradeswithname.ToList();
+                        return message.ReturnJson();
+
+                    }
+                    else
+                    {
+                        message.errorCode = 201;//身份验证失败
+                        return message.ReturnJson();
+
+                    }
+                }
+            }
+            return message.ReturnJson();
+        }
     }
 }
