@@ -48,6 +48,7 @@ namespace Back.Controllers
                 Semester=c.Semester,
                 MeetingId=c.MeetingId
             }).ToList();
+            message.errorCode = 200;
             return message.ReturnJson();
         }
         //根据id获取单个课程信息
