@@ -213,6 +213,25 @@ namespace Back.Controllers
             public int? MeetingId { get; set; }
             public string CourseName { get; set; }
         }
+        //每场考试考生信息，包含考试id,课名，课id
+        private class StudentInfo
+        {
+            public decimal StudentId { get; set; }
+            public string Name { get; set; }
+            public decimal ExamId { get; set; }
+            public decimal? CourseId { get; set; }
+            public string CourseName { get; set; }
+        }
+        //每场考试考生信息，包含成绩
+        private class StudentInfoWithGrade
+        {
+            public decimal StudentId { get; set; }
+            public string Name { get; set; }
+            public decimal ExamId { get; set; }
+            public decimal? CourseId { get; set; }
+            public string CourseName { get; set; }
+            public byte? Grade { get; set; }
+        }
         //学生获取所有成绩信息
         [HttpGet("student")]
         public string StudentGrades()
@@ -322,6 +341,53 @@ namespace Back.Controllers
                     }
                 }
             }
+            return message.ReturnJson();
+        }
+        //获取某一考试所有考生信息
+        [HttpGet("studentsinexam")]
+        public string StudentsInCourse()
+        {
+            Message message = new Message();
+            message.errorCode = 300;
+            decimal examid = Decimal.Parse(Request.Form["examid"]);//考试id
+            var exam = _Context.Exams.Find(examid);
+            if(exam==null)
+            {
+                message.errorCode = 202;//课程考试不存在
+                return message.ReturnJson();
+            }
+            var course = _Context.Courses.Find(exam.CourseId);
+            if(course==null)
+            {
+                message.errorCode = 202;//课程考试不存在
+                return message.ReturnJson();
+            }
+            var students = from s in _Context.Students
+                           join t in _Context.Takes on s.StudentId equals t.StudentId
+                           where t.CourseId==course.CourseId
+                           select new StudentInfo 
+                           { 
+                               StudentId=s.StudentId,
+                               Name=s.Name,
+                               ExamId=exam.ExamId,
+                               CourseId=course.CourseId,
+                               CourseName=course.CourseName
+                           };
+
+            var studentswithgrade = from s in students
+                                    join g in _Context.Grades on s.StudentId equals g.StudentId into grouping //left join 写法 in linq
+                                    from p in grouping.DefaultIfEmpty()
+                                    select new StudentInfoWithGrade
+                                    {
+                                        StudentId = s.StudentId,
+                                        Name = s.Name,
+                                        ExamId = s.ExamId,
+                                        CourseId = s.CourseId,
+                                        CourseName = s.CourseName,
+                                        Grade =p.Grade_
+                                    };
+            message.errorCode = 200;
+            message.data["StudentsList"] = studentswithgrade.ToList();
             return message.ReturnJson();
         }
     }
