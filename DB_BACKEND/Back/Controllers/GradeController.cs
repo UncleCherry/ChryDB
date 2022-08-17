@@ -201,6 +201,8 @@ namespace Back.Controllers
             public decimal ExamId { get; set; }
             public decimal StudentId { get; set; }
             public string StudentName { get; set; }
+            public string Year { get; set; }
+            public string Semester { get; set; }
             public byte? Grade { get; set; }
         }
         //考试信息
@@ -211,6 +213,8 @@ namespace Back.Controllers
             public DateTime? StartTime { get; set; }
             public DateTime? EndTime { get; set; }
             public int? MeetingId { get; set; }
+            public string Year { get; set; }
+            public string Semester { get; set; }
             public string CourseName { get; set; }
         }
         //每场考试考生信息，包含考试id,课名，课id
@@ -221,6 +225,8 @@ namespace Back.Controllers
             public decimal ExamId { get; set; }
             public decimal? CourseId { get; set; }
             public string CourseName { get; set; }
+            public string Year { get; set; }
+            public string Semester { get; set; }
         }
         //每场考试考生信息，包含成绩
         private class StudentInfoWithGrade
@@ -230,6 +236,8 @@ namespace Back.Controllers
             public decimal ExamId { get; set; }
             public decimal? CourseId { get; set; }
             public string CourseName { get; set; }
+            public string Year { get; set; }
+            public string Semester { get; set; }
             public byte? Grade { get; set; }
         }
         //学生获取所有成绩信息
@@ -271,7 +279,9 @@ namespace Back.Controllers
                                                  ExamId=e.ExamId,
                                                  StudentId=stu.StudentId,
                                                  StudentName=stu.Name,
-                                                 Grade=g.Grade_
+                                                 Grade=g.Grade_,
+                                                 Year=c.Year,
+                                                 Semester=c.Semester
                                              };
                         message.errorCode = 200;
                         message.data["GradesList"] = gradeswithname.ToList();
@@ -325,7 +335,9 @@ namespace Back.Controllers
                                               StartTime = e.StartTime,
                                               EndTime = e.EndTime,
                                               MeetingId = e.MeetingId,
-                                              CourseName = c.CourseName
+                                              CourseName = c.CourseName,
+                                              Year = c.Year,
+                                              Semester = c.Semester
                                           };
 
                         message.errorCode = 200;
@@ -371,7 +383,9 @@ namespace Back.Controllers
                                Name=s.Name,
                                ExamId=exam.ExamId,
                                CourseId=course.CourseId,
-                               CourseName=course.CourseName
+                               CourseName=course.CourseName,
+                               Year = course.Year,
+                               Semester = course.Semester
                            };
 
             var studentswithgrade = from s in students
@@ -384,6 +398,8 @@ namespace Back.Controllers
                                         ExamId = s.ExamId,
                                         CourseId = s.CourseId,
                                         CourseName = s.CourseName,
+                                        Year = s.Year,
+                                        Semester = s.Semester,
                                         Grade =p.Grade_
                                     };
             message.errorCode = 200;
