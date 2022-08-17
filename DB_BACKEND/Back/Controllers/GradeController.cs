@@ -203,6 +203,16 @@ namespace Back.Controllers
             public string StudentName { get; set; }
             public byte? Grade { get; set; }
         }
+        //考试信息
+        private class ExamInfo
+        {
+            public decimal ExamId { get; set; }
+            public decimal? CourseId { get; set; }
+            public DateTime? StartTime { get; set; }
+            public DateTime? EndTime { get; set; }
+            public int? MeetingId { get; set; }
+            public string CourseName { get; set; }
+        }
         //学生获取所有成绩信息
         [HttpGet("student")]
         public string StudentGrades()
@@ -246,6 +256,61 @@ namespace Back.Controllers
                                              };
                         message.errorCode = 200;
                         message.data["GradesList"] = gradeswithname.ToList();
+                        return message.ReturnJson();
+
+                    }
+                    else
+                    {
+                        message.errorCode = 201;//身份验证失败
+                        return message.ReturnJson();
+
+                    }
+                }
+            }
+            return message.ReturnJson();
+        }
+        //老师获取所有自己课程考试信息
+        [HttpGet("ins_exam")]
+        public string InsCourseExam()
+        {
+            Message message = new Message();
+            message.errorCode = 300;
+            StringValues token = default(StringValues);
+            if (Request.Headers.TryGetValue("token", out token))//验证token老师身份
+            {
+
+                var data = Token.VerifyToken(token);
+                if (data != null)
+                {
+                    decimal id = (decimal)data["id"];
+                    var iUser = from i in _Context.Users
+                                where i.UserId == id && i.UserType == 1
+                                select i;
+                    User ins = iUser.FirstOrDefault();
+                    if (ins != null)
+                    {
+                        //验证老师身份成功
+                        //查出该老师课程的所有考试
+                        var exams = from e in _Context.Exams
+                                    join i in _Context.Instructs
+                                    on e.CourseId equals i.CourseId
+                                    where i.InstructorId == ins.UserId
+                                    select e;
+                        var examswithname=from e in exams
+                                          join c in _Context.Courses
+                                          on e.CourseId equals c.CourseId
+                                          select new ExamInfo
+                                          {
+                                              ExamId = e.ExamId,
+                                              CourseId = e.CourseId,
+                                              StartTime = e.StartTime,
+                                              EndTime = e.EndTime,
+                                              MeetingId = e.MeetingId,
+                                              CourseName = c.CourseName
+                                          };
+
+                        message.errorCode = 200;
+                        message.data["ExamsList"] = examswithname.ToList();
                         return message.ReturnJson();
 
                     }
