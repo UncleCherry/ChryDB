@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Back.Entity;
+using Microsoft.AspNetCore.Cors;
+
 namespace Back.Controllers
 {
     [Route("api/[controller]")]
@@ -29,6 +31,18 @@ namespace Back.Controllers
             //_Context.Users.Update(us[0]);
            // _Context.SaveChanges();
             return us;
+        }
+        //对于数据库自增id的测试
+        [HttpPost]
+        public string PostCourse()
+        {
+            Message message = new Message();
+            Course c = new Course();
+            c.CourseName = "abcd";
+            _Context.Courses.Add(c);
+            _Context.SaveChanges();
+            message.errorCode = 200;
+            return message.ReturnJson();
         }
     }
 }

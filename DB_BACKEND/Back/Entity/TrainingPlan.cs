@@ -13,7 +13,7 @@ namespace Back.Entity
         }
 
         public string Major { get; set; }
-        public byte Grade { get; set; }
+        public decimal Grade { get; set; }
         public string Info { get; set; }
         public decimal? AdminId { get; set; }
 

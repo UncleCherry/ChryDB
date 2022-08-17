@@ -17,6 +17,7 @@ namespace Back
 {
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -32,8 +33,18 @@ namespace Back
             //options.UseOracle(Configuration.GetConnectionString("OracleDBContext"), b => b.UseOracleSQLCompatibility("12")));
             //
             // services.AddScoped<ModelContext>();
-            services.AddSingleton(typeof(ModelContext));//ÒÀÀµ×¢Èëµ¥Àý
+            services.AddScoped(typeof(ModelContext));//ÒÀÀµ×¢ÈëÓòÄ£Ê½µ¥Àý
             services.AddControllers();
+            //ÅäÖÃ¿çÓò
+            services.AddCors(op => {
+                op.AddPolicy(MyAllowSpecificOrigins, set => {
+                    set.SetIsOriginAllowed(origin => true)
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+                });
+            });
+            //
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Back", Version = "v1" });
@@ -56,6 +67,7 @@ namespace Back
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Back v1"));
             }
 
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseHttpsRedirection();
 
             app.UseRouting();
