@@ -26,6 +26,8 @@ namespace Back.Controllers
             public DateTime? EndTime { get; set; }
             public int? MeetingId { get; set; }
             public string CourseName { get; set; }
+            public string Year { get; set; }
+            public string Semester { get; set; }
         }
         // 获取所有考试信息
         [HttpGet("all")]
@@ -42,7 +44,9 @@ namespace Back.Controllers
                             StartTime = e.StartTime,
                             EndTime = e.EndTime,
                             MeetingId = e.MeetingId,
-                            CourseName=c.CourseName
+                            CourseName=c.CourseName,
+                            Year=c.Year,
+                            Semester=c.Semester
                         };
             /*
             message.data["ExamsList"] = _Context.Exams.Select(e => new ExamInfo
@@ -76,7 +80,9 @@ namespace Back.Controllers
                                 StartTime = exam.StartTime,
                                 EndTime = exam.EndTime,
                                 MeetingId = exam.MeetingId,
-                                CourseName = c.CourseName
+                                CourseName = c.CourseName,
+                                Year = c.Year,
+                                Semester = c.Semester
                             };
                 einfo = examinfo.FirstOrDefault();
                 message.data.Add("exam", einfo);
@@ -125,7 +131,9 @@ namespace Back.Controllers
                                        StartTime = e.StartTime,
                                        EndTime = e.EndTime,
                                        MeetingId = e.MeetingId,
-                                       CourseName = c.CourseName
+                                       CourseName = c.CourseName,
+                                       Year = c.Year,
+                                       Semester = c.Semester
                                    };
                         message.data["ExamsList"] = exams.ToList();
                         message.errorCode = 200;
