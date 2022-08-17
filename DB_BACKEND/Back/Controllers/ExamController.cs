@@ -272,5 +272,64 @@ namespace Back.Controllers
             }
             return message.ReturnJson();
         }
+
+        // 教务删除考试
+        [HttpDelete("del")]
+        public string DelExam()
+        {
+
+            Message message = new Message();
+            message.errorCode = 300;
+            StringValues token = default(StringValues);
+            if (Request.Headers.TryGetValue("token", out token))//验证token教务身份
+            {
+
+                var data = Token.VerifyToken(token);
+                if (data != null)
+                {
+                    decimal id = (decimal)data["id"];
+                    var aUser = from a in _Context.Users
+                                where a.UserId == id && a.UserType == 2
+                                select a;
+                    User admin = aUser.FirstOrDefault();
+                    if (admin != null)
+                    {
+                        //验证教务身份成功
+                        //删除考试信息
+                        decimal examid = decimal.Parse(Request.Form["examid"]);
+
+                        //查找有无对应考试
+                        Exam exam = _Context.Exams.Find(examid);
+                        if (exam != null)
+                        {
+                            try
+                            {
+                                _Context.Exams.Remove(exam);
+                                _Context.SaveChanges();
+                            }
+                            catch
+                            {
+                                message.errorCode = 202;//数据库更新失败
+                                return message.ReturnJson();
+                            }
+                            message.errorCode = 200;
+                            return message.ReturnJson();
+                        }
+                        else
+                        {
+                            message.errorCode = 203;//无对应考试
+                            return message.ReturnJson();
+                        }
+                    }
+                    else
+                    {
+                        message.errorCode = 201;//身份验证失败
+                        return message.ReturnJson();
+
+                    }
+                }
+            }
+            return message.ReturnJson();
+        }
     }
 }
