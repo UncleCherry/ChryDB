@@ -53,12 +53,11 @@ namespace Back.Controllers
         }
         //根据id获取单个课程信息
         [HttpGet("getinfo")]
-        public string GetCourseInfo()
+        public string GetCourseInfo(decimal courseid=-1)
         {
 
             Message message = new Message();
             CourseInfo cinfo = new CourseInfo();
-            decimal courseid = decimal.Parse(Request.Form["courseid"]);
             var course=_Context.Courses.Find(courseid);
             //查找有无对应课程
             if (course != null)

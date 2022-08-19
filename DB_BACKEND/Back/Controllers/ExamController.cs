@@ -62,12 +62,11 @@ namespace Back.Controllers
         }
         //根据id获取单个考试信息
         [HttpGet("getinfo")]
-        public string GetExamInfo()
+        public string GetExamInfo(decimal examid=-1)
         {
 
             Message message = new Message();
             ExamInfo einfo = new ExamInfo();
-            decimal examid = decimal.Parse(Request.Form["examid"]);
             var exam = _Context.Exams.Find(examid);
             //查找有无对应考试
             if (exam != null)

@@ -357,11 +357,10 @@ namespace Back.Controllers
         }
         //获取某一考试所有考生信息
         [HttpGet("studentsinexam")]
-        public string StudentsInCourse()
+        public string StudentsInCourse(decimal examid=-1)
         {
             Message message = new Message();
             message.errorCode = 300;
-            decimal examid = Decimal.Parse(Request.Form["examid"]);//考试id
             var exam = _Context.Exams.Find(examid);
             if(exam==null)
             {
