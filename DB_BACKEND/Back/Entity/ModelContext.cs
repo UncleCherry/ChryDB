@@ -98,10 +98,11 @@ namespace Back.Entity
             modelBuilder.Entity<Attendance>(entity =>
             {
                 entity.ToTable("Attendance");
+                entity.HasKey(e => new { e.CourseId, e.StudentId,e.CourseNumber }).HasName("Attendances_PK");
 
-                entity.Property(e => e.AttendanceId)
-                    .HasColumnType("NUMBER(20)")
-                    .HasColumnName("AttendanceID");
+                entity.Property(e => e.CourseNumber).HasPrecision(4);
+                    //.HasColumnType("NUMBER(4)")
+                    //.HasColumnName("CourseNumber");
 
                 entity.Property(e => e.CourseId)
                     .HasColumnType("NUMBER(20)")

@@ -44,5 +44,14 @@ namespace Back.Controllers
             message.errorCode = 200;
             return message.ReturnJson();
         }
+        //对于数据库自增id的测试
+        [HttpGet("ff")]
+        public void ff()
+        {
+            decimal cid = 10002;
+            decimal sid = 200001;
+            _Context.Remove(_Context.Attendances.Find(cid,sid,1));
+            _Context.SaveChanges();
+        }
     }
 }

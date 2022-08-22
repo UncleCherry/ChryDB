@@ -7,12 +7,13 @@ namespace Back.Entity
 {
     public partial class Attendance
     {
-        public decimal AttendanceId { get; set; }
-        public decimal? CourseId { get; set; }
-        public decimal? StudentId { get; set; }
+        //public decimal AttendanceId { get; set; }
+        public decimal CourseId { get; set; }
+        public decimal StudentId { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public bool? IsEffective { get; set; }
+        public int CourseNumber { get; set; }
 
         public virtual Course Course { get; set; }
         public virtual Student Student { get; set; }
