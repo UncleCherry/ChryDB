@@ -40,26 +40,26 @@ namespace Back.Controllers
             return message.ReturnJson();
         }
 
-        // 教师为课程添加录播
+        // 教师/教务为课程添加录播
         [HttpPost("postRecord")]
         public string PostRecord()
         {
             Message message = new Message();
             message.errorCode = 300;
             StringValues token = default(StringValues);
-            if (Request.Headers.TryGetValue("token", out token))//验证token教师身份
+            if (Request.Headers.TryGetValue("token", out token))//验证token教师/教务身份
             {
                 var data = Token.VerifyToken(token);
                 if (data != null)
                 {
                     decimal id = (decimal)data["id"];
                     var aUser = from a in _Context.Users
-                                where a.UserId == id && a.UserType == 1
+                                where a.UserId == id && (a.UserType == 1 || a.UserType == 2)
                                 select a;
                     User admin = aUser.FirstOrDefault();
                     if (admin != null)
                     {
-                        //验证教师身份成功
+                        //验证教师/教务身份成功
                         //添加录播信息
                         decimal recordid = Decimal.Parse(Request.Form["Recordid"]);
                         decimal courseid = Decimal.Parse(Request.Form["Courseid"]);
@@ -94,5 +94,124 @@ namespace Back.Controllers
             }
             return message.ReturnJson();
         }
+
+        // 教师/教务修改录播
+        [HttpPut("altRecord")]
+        public string AltRecord()
+        {
+            Message message = new Message();
+            message.errorCode = 300;
+            StringValues token = default(StringValues);
+            if (Request.Headers.TryGetValue("token", out token))//验证token教师/教务身份
+            {
+                var data = Token.VerifyToken(token);
+                if (data != null)
+                {
+                    decimal id = (decimal)data["id"];
+                    var aUser = from a in _Context.Users
+                                where a.UserId == id && (a.UserType == 1 || a.UserType == 2)
+                                select a;
+                    User admin = aUser.FirstOrDefault();
+                    if (admin != null)
+                    {
+                        //验证身份成功
+                        //修改录播信息
+                        decimal recordid = decimal.Parse(Request.Form["recordid"]);
+
+                        //查找有无对应录播
+                        Record record = _Context.Records.Find(recordid);
+                        if (record != null)
+                        {
+                            //对Records表改
+                            string url = Request.Form["url"];
+                            record.Url = url;
+                            try
+                            {
+                                _Context.SaveChanges();
+                            }
+                            catch
+                            {
+                                message.errorCode = 202;//数据库更新失败
+                                return message.ReturnJson();
+                            }
+                            message.errorCode = 200;
+                            return message.ReturnJson();
+                        }
+                        else
+                        {
+                            message.errorCode = 203;//无对应录播
+                            return message.ReturnJson();
+                        }
+                    }
+                    else
+                    {
+                        message.errorCode = 201;//身份验证失败
+                        return message.ReturnJson();
+
+                    }
+                }
+            }
+            return message.ReturnJson();
+        }
+
+
+        // 教师/教务删除考试
+        [HttpDelete("delRecord")]
+        public string DelRecord()
+        {
+            Message message = new Message();
+            message.errorCode = 300;
+            StringValues token = default(StringValues);
+            if (Request.Headers.TryGetValue("token", out token))//验证token教师/教务身份
+            {
+                var data = Token.VerifyToken(token);
+                if (data != null)
+                {
+                    decimal id = (decimal)data["id"];
+                    var aUser = from a in _Context.Users
+                                where a.UserId == id && (a.UserType == 1 || a.UserType == 2)
+                                select a;
+                    User admin = aUser.FirstOrDefault();
+                    if (admin != null)
+                    {
+                        //验证身份成功
+                        //删除录播信息
+                        decimal recordid = decimal.Parse(Request.Form["recordid"]);
+
+                        //查找有无对应录播
+                        Record record = _Context.Records.Find(recordid);
+                        if (record != null)
+                        {
+                            try
+                            {
+                                _Context.Records.Remove(record);
+                                _Context.SaveChanges();
+                            }
+                            catch
+                            {
+                                message.errorCode = 202;//数据库更新失败
+                                return message.ReturnJson();
+                            }
+                            message.errorCode = 200;
+                            return message.ReturnJson();
+                        }
+                        else
+                        {
+                            message.errorCode = 203;//无对应录播
+                            return message.ReturnJson();
+                        }
+                    }
+                    else
+                    {
+                        message.errorCode = 201;//身份验证失败
+                        return message.ReturnJson();
+
+                    }
+                }
+            }
+            return message.ReturnJson();
+        }
+
+
     }
 }
