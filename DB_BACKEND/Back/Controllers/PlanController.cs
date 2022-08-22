@@ -25,6 +25,22 @@ namespace Back.Controllers
             public string Info { get; set; }
             public decimal? AdminId { get; set; }
         }
+        // 获取所有培养计划信息
+        [HttpGet("all")]
+        public string GetAllPlans()
+        {
+            Message message = new Message();
+            message.data.Add("PlansList", new List<PlanInfo>());
+            message.data["PlansList"] = _Context.TrainingPlans.Select(p => new PlanInfo
+            {
+                Major=p.Major,
+                Grade=p.Grade,
+                Info=p.Info,
+                AdminId=p.AdminId
+            }).ToList();
+            message.errorCode = 200;
+            return message.ReturnJson();
+        }
         // 获取学生专业培养计划信息
         [HttpGet("student")]
         public string GetPlanInfo()
