@@ -201,6 +201,43 @@ namespace Back.Controllers
             public decimal ExamId { get; set; }
             public decimal StudentId { get; set; }
             public string StudentName { get; set; }
+            public string Year { get; set; }
+            public string Semester { get; set; }
+            public byte? Grade { get; set; }
+        }
+        //考试信息
+        private class ExamInfo
+        {
+            public decimal ExamId { get; set; }
+            public decimal? CourseId { get; set; }
+            public DateTime? StartTime { get; set; }
+            public DateTime? EndTime { get; set; }
+            public int? MeetingId { get; set; }
+            public string Year { get; set; }
+            public string Semester { get; set; }
+            public string CourseName { get; set; }
+        }
+        //每场考试考生信息，包含考试id,课名，课id
+        private class StudentInfo
+        {
+            public decimal StudentId { get; set; }
+            public string Name { get; set; }
+            public decimal ExamId { get; set; }
+            public decimal? CourseId { get; set; }
+            public string CourseName { get; set; }
+            public string Year { get; set; }
+            public string Semester { get; set; }
+        }
+        //每场考试考生信息，包含成绩
+        private class StudentInfoWithGrade
+        {
+            public decimal StudentId { get; set; }
+            public string Name { get; set; }
+            public decimal ExamId { get; set; }
+            public decimal? CourseId { get; set; }
+            public string CourseName { get; set; }
+            public string Year { get; set; }
+            public string Semester { get; set; }
             public byte? Grade { get; set; }
         }
         //学生获取所有成绩信息
@@ -242,7 +279,9 @@ namespace Back.Controllers
                                                  ExamId=e.ExamId,
                                                  StudentId=stu.StudentId,
                                                  StudentName=stu.Name,
-                                                 Grade=g.Grade_
+                                                 Grade=g.Grade_,
+                                                 Year=c.Year,
+                                                 Semester=c.Semester
                                              };
                         message.errorCode = 200;
                         message.data["GradesList"] = gradeswithname.ToList();
@@ -257,6 +296,113 @@ namespace Back.Controllers
                     }
                 }
             }
+            return message.ReturnJson();
+        }
+        //老师获取所有自己课程考试信息
+        [HttpGet("ins_exam")]
+        public string InsCourseExam()
+        {
+            Message message = new Message();
+            message.errorCode = 300;
+            StringValues token = default(StringValues);
+            if (Request.Headers.TryGetValue("token", out token))//验证token老师身份
+            {
+
+                var data = Token.VerifyToken(token);
+                if (data != null)
+                {
+                    decimal id = (decimal)data["id"];
+                    var iUser = from i in _Context.Users
+                                where i.UserId == id && i.UserType == 1
+                                select i;
+                    User ins = iUser.FirstOrDefault();
+                    if (ins != null)
+                    {
+                        //验证老师身份成功
+                        //查出该老师课程的所有考试
+                        var exams = from e in _Context.Exams
+                                    join i in _Context.Instructs
+                                    on e.CourseId equals i.CourseId
+                                    where i.InstructorId == ins.UserId
+                                    select e;
+                        var examswithname=from e in exams
+                                          join c in _Context.Courses
+                                          on e.CourseId equals c.CourseId
+                                          select new ExamInfo
+                                          {
+                                              ExamId = e.ExamId,
+                                              CourseId = e.CourseId,
+                                              StartTime = e.StartTime,
+                                              EndTime = e.EndTime,
+                                              MeetingId = e.MeetingId,
+                                              CourseName = c.CourseName,
+                                              Year = c.Year,
+                                              Semester = c.Semester
+                                          };
+
+                        message.errorCode = 200;
+                        message.data["ExamsList"] = examswithname.ToList();
+                        return message.ReturnJson();
+
+                    }
+                    else
+                    {
+                        message.errorCode = 201;//身份验证失败
+                        return message.ReturnJson();
+
+                    }
+                }
+            }
+            return message.ReturnJson();
+        }
+        //获取某一考试所有考生信息
+        [HttpGet("studentsinexam")]
+        public string StudentsInCourse(decimal examid=-1)
+        {
+            Message message = new Message();
+            message.errorCode = 300;
+            var exam = _Context.Exams.Find(examid);
+            if(exam==null)
+            {
+                message.errorCode = 202;//课程考试不存在
+                return message.ReturnJson();
+            }
+            var course = _Context.Courses.Find(exam.CourseId);
+            if(course==null)
+            {
+                message.errorCode = 202;//课程考试不存在
+                return message.ReturnJson();
+            }
+            var students = from s in _Context.Students
+                           join t in _Context.Takes on s.StudentId equals t.StudentId
+                           where t.CourseId==course.CourseId
+                           select new StudentInfo 
+                           { 
+                               StudentId=s.StudentId,
+                               Name=s.Name,
+                               ExamId=exam.ExamId,
+                               CourseId=course.CourseId,
+                               CourseName=course.CourseName,
+                               Year = course.Year,
+                               Semester = course.Semester
+                           };
+
+            var studentswithgrade = from s in students
+                                    join g in _Context.Grades on s.StudentId equals g.StudentId into grouping //left join 写法 in linq
+                                    from p in grouping.DefaultIfEmpty()
+                                    select new StudentInfoWithGrade
+                                    {
+                                        StudentId = s.StudentId,
+                                        Name = s.Name,
+                                        ExamId = s.ExamId,
+                                        CourseId = s.CourseId,
+                                        CourseName = s.CourseName,
+                                        Year = s.Year,
+                                        Semester = s.Semester,
+                                        Grade =p.Grade_
+                                    };
+            message.errorCode = 200;
+            message.data["StudentsList"] = studentswithgrade.ToList();
             return message.ReturnJson();
         }
     }
