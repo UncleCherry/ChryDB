@@ -204,6 +204,7 @@ namespace Back.Controllers
             public string Year { get; set; }
             public string Semester { get; set; }
             public byte? Grade { get; set; }
+            public byte? Credit { get; set; }
         }
         //考试信息
         private class ExamInfo
@@ -281,7 +282,8 @@ namespace Back.Controllers
                                                  StudentName=stu.Name,
                                                  Grade=g.Grade_,
                                                  Year=c.Year,
-                                                 Semester=c.Semester
+                                                 Semester=c.Semester,
+                                                 Credit=c.Credit
                                              };
                         message.errorCode = 200;
                         message.data["GradesList"] = gradeswithname.ToList();
