@@ -485,5 +485,66 @@ namespace Back.Controllers
             }
             return message.ReturnJson();
         }
+
+        // 教务修改课程会议号
+        [HttpPut("altMeetingid")]
+        public string AltMeetingid()
+        {
+
+            Message message = new Message();
+            message.errorCode = 300;
+            StringValues token = default(StringValues);
+            if (Request.Headers.TryGetValue("token", out token))//验证token教务身份
+            {
+
+                var data = Token.VerifyToken(token);
+                if (data != null)
+                {
+                    decimal id = (decimal)data["id"];
+                    var aUser = from a in _Context.Users
+                                where a.UserId == id && a.UserType == 2
+                                select a;
+                    User admin = aUser.FirstOrDefault();
+                    if (admin != null)
+                    {
+                        //验证教务身份成功
+                        //修改课程信息
+                        decimal courseid = decimal.Parse(Request.Form["courseid"]);
+
+                        //查找有无对应课程
+                        Course course = _Context.Courses.Find(courseid);
+                        if (course != null)
+                        {
+                            //对Course表改
+                            int meetingid = int.Parse(Request.Form["meetingid"]);
+                            course.MeetingId = meetingid;
+                            try
+                            {
+                                _Context.SaveChanges();
+                            }
+                            catch
+                            {
+                                message.errorCode = 202;//数据库更新失败
+                                return message.ReturnJson();
+                            }
+                            message.errorCode = 200;
+                            return message.ReturnJson();
+                        }
+                        else
+                        {
+                            message.errorCode = 203;//无对应课程
+                            return message.ReturnJson();
+                        }
+                    }
+                    else
+                    {
+                        message.errorCode = 201;//身份验证失败
+                        return message.ReturnJson();
+
+                    }
+                }
+            }
+            return message.ReturnJson();
+        }
     }
 }
