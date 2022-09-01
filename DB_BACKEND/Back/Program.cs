@@ -21,7 +21,7 @@ namespace Back
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    //webBuilder.UseUrls("http://192.168.1.3:1919");
+                    webBuilder.UseUrls("http://0.0.0.0:5002");
                 });
     }
 }
