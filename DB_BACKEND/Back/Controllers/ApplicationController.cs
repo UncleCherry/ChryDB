@@ -176,12 +176,12 @@ namespace Back.Controllers
                         //对Application表增
                         string reason= Request.Form["reason"];
                         int type = int.Parse(Request.Form["type"]);//申请类型
-                        
+                        string formatreason = Request.Form["courseid"] + "-" + "0" + "-" + reason;
                         DateTime time = DateTime.Now;
                         Application application = new Application();
                         application.UserId = student.UserId;
                         application.AdminId = admin.AdminId;
-                        application.Reason = reason;
+                        application.Reason = formatreason;
                         application.Type = type;
                         application.Time = time;
                         application.State = 0;//默认为0，待审核状态
