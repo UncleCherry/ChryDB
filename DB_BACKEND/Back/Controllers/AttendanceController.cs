@@ -175,51 +175,7 @@ namespace Back.Controllers
                                   IsEffective = a.IsEffective
                               };
             message.data["AttendanceList"] = Attendances.ToList();
-            return message.ReturnJson();
-        }
-
-        [HttpGet("getGrade")]
-        public string GetAttendanceGrade()
-        {
-            Message message = new Message();
-            message.data.Add("AttendanceGradeList", new List<AttendanceGrade>());
-
-            var temp = (from a in _Context.Attendances
-                        join s in _Context.Students on a.StudentId equals s.StudentId
-                        join c in _Context.Courses on a.CourseId equals c.CourseId
-                        where (Request.Query["courseid"] == "" || a.CourseId == decimal.Parse(Request.Query["courseid"]))
-                        && (Request.Query["studentid"] == "" || a.StudentId == decimal.Parse(Request.Query["studentid"]))
-                        select new
-                        {
-                            CourseId = a.CourseId,
-                            CourseName = c.CourseName,
-                            StudentId = a.StudentId,
-                            Name = s.Name,
-                            CourseNumber = a.CourseNumber,
-                            IsEffective = a.IsEffective
-                        });
-
-
-
-            var AttendanceGrade = (from a in temp
-                                   where a!=null
-                                   group a by new
-                                   {
-                                       CourseId = a.CourseId,
-                                       StudentId = a.StudentId,
-                                       CourseName = a.CourseName,
-                                       Name = a.Name
-                                   }into g
-                                   select new AttendanceGrade
-                                   {
-                                       CourseId = g.Key.CourseId,
-                                       CourseName = g.Key.CourseName,
-                                       Name = g.Key.Name,
-                                       StudentId = g.Key.StudentId,
-                                       absence = (g == null ? 0 : g.Count(a => (bool)!a.IsEffective)),
-                                       grade = (g == null ? 0 : (100 - 10 * g.Count(a => (bool)!a.IsEffective)))        //缺勤一次扣十分
-                                   });
-            message.data["AttendanceGradeList"] = AttendanceGrade;
+            message.errorCode = 200;
             return message.ReturnJson();
         }
 

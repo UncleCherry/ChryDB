@@ -16,6 +16,11 @@ namespace Back.Controllers
     {
         private readonly ModelContext _Context;
 
+        public LeaveController(ModelContext modelContext)
+        {
+            _Context = modelContext;
+        }
+
         public class ApplicationInfo
         {
             public decimal ApplicationId { get; set; }
@@ -160,7 +165,7 @@ namespace Back.Controllers
                         //验证学生身份成功
                         //搜索申请
                         var apps = _Context.Applications.Where(x => x.UserId == student.UserId && x.Type==5);//寻找请假信息
-                        message.data["ApplicaitionsList"] = apps.Select(a => new ApplicationInfo
+                        message.data["ApplicationsList"] = apps.Select(a => new ApplicationInfo
                         {
                             ApplicationId = a.ApplicationId,
                             UserId = student.UserId,
@@ -220,7 +225,7 @@ namespace Back.Controllers
                                                State = a.State
                                            };
 
-                        message.data["ApplicaitionsList"] = appswithname.ToList();
+                        message.data["ApplicationsList"] = appswithname.ToList();
                         message.errorCode = 200;
                         return message.ReturnJson();
                     }
@@ -234,6 +239,18 @@ namespace Back.Controllers
             return message.ReturnJson();
         }
 
+        [HttpGet("getApplicationInfo")]
+        public string getApplicationInfo()
+        {
+            Message message = new Message();
+            message.data.Add("ApplicationsList", new List<Application>());
+            var app = from a in _Context.Applications
+                      where decimal.Parse(Request.Query["leaveid"]) == a.ApplicationId
+                      select a;
+            message.data["ApplicationsList"] = app.ToList();
+            message.errorCode = 200;
+            return message.ReturnJson();
+        }
     }
 
 }
