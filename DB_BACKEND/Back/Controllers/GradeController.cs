@@ -392,6 +392,7 @@ namespace Back.Controllers
             var studentswithgrade = from s in students
                                     join g in _Context.Grades on s.StudentId equals g.StudentId into grouping //left join 写法 in linq
                                     from p in grouping.DefaultIfEmpty()
+                                    where p.ExamId == examid
                                     select new StudentInfoWithGrade
                                     {
                                         StudentId = s.StudentId,
