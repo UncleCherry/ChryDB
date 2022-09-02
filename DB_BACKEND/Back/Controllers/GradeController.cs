@@ -359,7 +359,7 @@ namespace Back.Controllers
         }
         //获取某一考试所有考生信息
         [HttpGet("studentsinexam")]
-        public string StudentsInCourse(decimal examid=-1)
+        public string StudentsInExam(decimal examid=-1)
         {
             Message message = new Message();
             message.errorCode = 300;
@@ -390,7 +390,7 @@ namespace Back.Controllers
                            };
 
             var studentswithgrade = from s in students
-                                    join g in _Context.Grades on s.StudentId equals g.StudentId into grouping //left join 写法 in linq
+                                    join g in _Context.Grades on new { sid = s.StudentId, eid = s.ExamId } equals new { sid = g.StudentId, eid = g.ExamId } into grouping //left join 写法 in linq
                                     from p in grouping.DefaultIfEmpty()
                                     select new StudentInfoWithGrade
                                     {

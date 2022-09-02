@@ -58,6 +58,7 @@ namespace Back.Controllers
                 MeetingId=e.MeetingId
             }).ToList();*/
             message.data["ExamsList"] = exams.ToList();
+            message.errorCode = 200;
             return message.ReturnJson();
         }
         //根据id获取单个考试信息
