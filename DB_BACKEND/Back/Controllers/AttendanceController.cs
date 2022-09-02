@@ -186,7 +186,7 @@ namespace Back.Controllers
             Message message = new Message();
             decimal courseid = decimal.Parse(Request.Form["courseid"]);
             decimal studentid = decimal.Parse(Request.Form["studentid"]);
-            decimal coursenumber = decimal.Parse(Request.Form["coursenumber"]);
+            int coursenumber = int.Parse(Request.Form["coursenumber"]);
             Attendance att = _Context.Attendances.Find(courseid, studentid, coursenumber);
             if (att != null)
             {
@@ -217,7 +217,7 @@ namespace Back.Controllers
             Message message = new Message();
             decimal courseid = decimal.Parse(Request.Form["courseid"]);
             decimal studentid = decimal.Parse(Request.Form["studentid"]);
-            decimal coursenumber = decimal.Parse(Request.Form["coursenumber"]);
+            int coursenumber = int.Parse(Request.Form["coursenumber"]);
             Attendance att = _Context.Attendances.Find(courseid, studentid, coursenumber);
             if (att != null)
             {
